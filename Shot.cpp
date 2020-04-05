@@ -6,17 +6,12 @@
 #include <conio.h>
 
 #include "GlobalSettings.cpp"
+#include "Shot.h"
 
-#ifndef ENEMY_H
-#define ENEMY_H
+using namespace std;
 
-class Enemy : public Entity {
-	public: 
-		void move();
-		void 
-		
-	private:
-		static int numShots = 0;
-};
-
-#endif
+Shot::Shot(int x, int y, int sAX, int sAY, char ch, int d)
+	: Entity(x, y, sAX, sAY, ch)
+{
+	this->dmg = d;
+}

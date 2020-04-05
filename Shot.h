@@ -7,16 +7,15 @@
 
 #include "GlobalSettings.cpp"
 
-#ifndef ENEMY_H
-#define ENEMY_H
+#ifndef SHOT_H
+#define SHOT_H
 
-class Enemy : public Entity {
-	public: 
-		void move();
-		void 
+class Shot : public Entity {
+	public:
+		Shot(int, int, int, int, char, int);
 		
-	private:
-		static int numShots = 0;
+	private: 
+		int dmg;
 };
 
 #endif

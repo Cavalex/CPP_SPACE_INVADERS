@@ -5,24 +5,13 @@
 #include <string>
 #include <conio.h>
 
-// Estas não estão na tabela ASCII!!!
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define KEY_X 120
-
-#include "Entity.h"
 #include "Entity.cpp"
-#include "Menu.h"
+//#include "Menu.cpp"
+#include "Player.cpp"
+//#include "Shot.cpp"
+//#include "GlobalSettings.cpp"
 
 using namespace std;
-
-int HEIGHT = 35;
-int WIDTH = 75;
-
-char chPlayer = 'P';
-char bgChar = ' ';
 
 void SetConsoleSize(int width, int height){
 	HANDLE wHnd;    // Handle to write to the console.
@@ -51,25 +40,27 @@ void ClearScreen(const string& ch){
 }
 
 // AGORA O JOGO
+/*
 void movePlayer(int x, int y, int oldX = 0, int oldY = 0){
 	SetCursorPosition(oldX, oldY);
 	cout << bgChar;
 	SetCursorPosition(x, y);
 	cout << chPlayer;
 }
-
+*/
 int main(){
 	
 	// Mudar o tamanho da consola
 	SetConsoleSize(WIDTH, HEIGHT);
 	//////////////////////////////
-	
+	/*
 	int initX = WIDTH / 2;
 	int initY = HEIGHT / 2;
 	int oldX = initX;
 	int oldY = initY;
 	int x = initX;
 	int y = initY;
+	*/
 	
 	// NÃO ESTÁ A DAR
 	// Talvez seja melhor não colocar o menu numa classe
@@ -78,19 +69,27 @@ int main(){
 	menu.showOptions();
 	*/
 	
+	/*
 	// posição inicial do jogador
 	movePlayer(x, y);
 		
 	char key = getch();
     int value = key;
+	*/
 	
 	// Desenhar esta entity
+	Player hero = Player(WIDTH / 2, HEIGHT - 2, 1, 0, 'O', "Cavalex", 0);
 	Entity e = Entity(50, 25, 2, 2, 'X');
 	e.drawEntity();
+	e.moveTo(5, 5);
+	hero.shoot(1, 1, '|', 5);
 	
 	////////////////////// Game Loop
-    while(value != KEY_X){
+    //while(value != KEY_X){
+    while(true){
+    	hero.moveAction();
     	
+    	/*
     	// Ultimos valores do player, para serem "limpos"
 		oldX = x;
         oldY = y;
@@ -115,6 +114,7 @@ int main(){
 		
         key = getch();
         value = key;
+        */
     }
 	
 	cin.get();

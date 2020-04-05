@@ -5,13 +5,9 @@
 #include <string>
 #include <conio.h>
 
-#include "Menu.h"
+#include "GlobalSettings.cpp"
 
-void SetCursorPosition(int x, int y){
-	HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD pos = {x,y};
-	SetConsoleCursorPosition(output, pos);
-}
+#include "Menu.h"
 
 void Menu::showOptions(){
 	for(int i = 0; i < options.size(); i++){
