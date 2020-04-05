@@ -1,4 +1,4 @@
-// Ficheiro com vari·veis e funÁıes "globais", que vamos usar em todos os ficheiros/classes do jogo
+// Ficheiro com vari√°veis e fun√ß√µes "globais", que vamos usar em todos os ficheiros/classes do jogo
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,22 +7,21 @@
 #include <string>
 #include <conio.h>
 
-// Vari·vel para evitar incluir o ficheiro v·rias vezes
+// Vari√°vel para evitar incluir o ficheiro v√°rias vezes
 #ifndef GLOBAL_CPP
 #define GLOBAL_CPP
 
-// Estas n„o est„o na tabela ASCII!!!
+// Estas n√£o est√£o na tabela ASCII!!!
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
-// Estas est„o:
+// Estas est√£o:
 #define KEY_X 120
 
 #define HEIGHT 35
 #define WIDTH 75
 
-#define chPlayer 'P'
 #define bgChar ' '
 
 using namespace std;
