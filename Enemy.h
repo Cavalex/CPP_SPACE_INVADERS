@@ -12,11 +12,14 @@
 
 class Enemy : public Entity {
 	public: 
+		Enemy(int, int, int, int, char, int, int, int);
 		void move();
-		void 
 		
 	private:
-		static int numShots = 0;
+		int velocity;
+		int typeOfMove;
+		int way; // -1 Esquerda / 1 Direita
 };
 
 #endif
+

@@ -18,26 +18,31 @@ Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s)
 	this->score = s;
 }
 
-void Player::moveAction(){
+bool Player::moveAction(){
 	
-	char key = getch();
-	int value = key;
-	
-    // movimento
-    switch(value){
-        case KEY_UP:
-            moveTo(x, y - 1);
-            break;
-        case KEY_DOWN:
-            moveTo(x, y + 1);
-            break;
-        case KEY_LEFT:
-            moveTo(x - 1, y);
-			break;
-        case KEY_RIGHT:
-            moveTo(x + 1, y);
-			break;
-    }
+	if (kbhit()){
+		char key = getch();
+		int value = key;
+		
+	    // movimento
+	    switch(value){
+	    	/*
+	        case KEY_UP:
+	            moveTo(x, y - 1);
+	            break;
+	        case KEY_DOWN:
+	            moveTo(x, y + 1);
+	            break;
+	        */
+	        case KEY_LEFT:
+	            moveTo(x - 1, y);
+				break;
+	        case KEY_RIGHT:
+	            moveTo(x + 1, y);
+				break;
+	    }
+	    return true;
+	}
 }
 
 void Player::shoot(int sX, int sY, char cha, int d){

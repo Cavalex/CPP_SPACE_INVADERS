@@ -1,4 +1,4 @@
-// Ficheiro com vari√°veis e fun√ß√µes "globais", que vamos usar em todos os ficheiros/classes do jogo
+// Ficheiro com vari·veis e funÁıes "globais", que vamos usar em todos os ficheiros/classes do jogo
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,17 +6,18 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
+#include <time.h>
 
-// Vari√°vel para evitar incluir o ficheiro v√°rias vezes
+// Vari·vel para evitar incluir o ficheiro v·rias vezes
 #ifndef GLOBAL_CPP
 #define GLOBAL_CPP
 
-// Estas n√£o est√£o na tabela ASCII!!!
+// Estas n„o est„o na tabela ASCII!!!
 #define KEY_UP 72
 #define KEY_DOWN 80
 #define KEY_LEFT 75
 #define KEY_RIGHT 77
-// Estas est√£o:
+// Estas est„o:
 #define KEY_X 120
 
 #define HEIGHT 35
@@ -24,12 +25,25 @@
 
 #define bgChar ' '
 
+int numEnemyShots = 0;
+int numPlayerShots = 0;
+
 using namespace std;
 
 void SetCursorPosition(int x, int y){
 	HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD pos = {x,y};
 	SetConsoleCursorPosition(output, pos);
+}
+
+void timer(int n) {
+    // Tempo inicial
+    clock_t start_time = clock();
+
+    // Uma espÈcie de sleep, a funÁ„o timer sÛ acaba quando o while terminar,
+    //logo sÛ termina quando se passar o tempo que colocamos no par‚metro.
+    while (clock() < start_time + n)
+		;
 }
 
 void SetConsoleSize(int width, int height){
@@ -49,7 +63,7 @@ void SetConsoleSize(int width, int height){
     SetConsoleScreenBufferSize(wHnd, bufferSize);
 }
 
-void ClearScreen(const string& ch){
+void ClearScreen(char ch){
 	for (int y = 0; y < HEIGHT; y++){
 		for (int x = 0; x < WIDTH; x++){
 			SetCursorPosition(x, y);

@@ -15,7 +15,7 @@ using namespace std;
 class Player : public Entity {
 	public:
 		Player(int, int, int, int, char, string, int);
-		void moveAction();
+		bool moveAction();
 		void shoot(int, int, char, int);
 		
 	private: 
