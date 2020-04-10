@@ -12,11 +12,12 @@
 
 class Enemy : public Entity {
 	public: 
-		Enemy(int, int, int, int, char, int, int, int);
+		Enemy(int, int, int, int, char, double, int, int);
 		void move();
+		double getVelocity();
 		
 	private:
-		int velocity;
+		double velocity; // Tem que ser um double para fazer contas com casas decimais
 		int typeOfMove;
 		int way; // -1 Esquerda / 1 Direita
 };

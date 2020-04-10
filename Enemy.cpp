@@ -8,7 +8,7 @@
 #include "GlobalSettings.cpp"
 #include "Enemy.h"
 
-Enemy::Enemy(int x, int y, int sAX, int sAY, char ch, int v, int t, int w)
+Enemy::Enemy(int x, int y, int sAX, int sAY, char ch, double v, int t, int w)
 	: Entity (x, y, sAX, sAY, ch)
 {
 	this->velocity = v;
@@ -32,4 +32,6 @@ void Enemy::move(){
 		}
 	//}
 }
+
+double Enemy::getVelocity(){ return velocity; }
 
