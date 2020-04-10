@@ -33,12 +33,13 @@ void Game::start(){
 		players[i].drawEntity(); // Só para não ficar invisível no início
 	}
 	
+	// game loop
 	while(true){
     	
     	updateEnemies();
     	updatePlayers();
 		
-		usleep(5000);
+		sleep(0.01);
     }
 }
 
