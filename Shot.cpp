@@ -15,3 +15,9 @@ Shot::Shot(int x, int y, int sAX, int sAY, char ch, int d)
 {
 	this->dmg = d;
 }
+
+Shot::Shot()
+	: Entity(-100, -100, 0, 0, ' ')
+{
+	this->dmg = 0;
+}

@@ -14,13 +14,16 @@ using namespace std;
 
 class Player : public Entity {
 	public:
-		Player(int, int, int, int, char, string, int);
+		Player(int, int, int, int, char, string, int, bool);
+		Player();
 		bool moveAction();
 		void shoot(int, int, char, int);
+		bool isAlive();
 		
 	private: 
 		int score;
 		string name;
+		bool alive;
 		
 };
 

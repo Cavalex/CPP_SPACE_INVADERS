@@ -13,6 +13,7 @@
 class Shot : public Entity {
 	public:
 		Shot(int, int, int, int, char, int);
+		Shot();
 		
 	private: 
 		int dmg;

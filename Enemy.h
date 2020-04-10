@@ -12,14 +12,19 @@
 
 class Enemy : public Entity {
 	public: 
-		Enemy(int, int, int, int, char, double, int, int);
-		void move();
+		Enemy(int, int, int, int, char, double, int, bool);
+		Enemy();
+		void moveHorizontally();
+		void moveVertically();
+		bool collidedWall();
 		double getVelocity();
+		bool isAlive();
 		
 	private:
 		double velocity; // Tem que ser um double para fazer contas com casas decimais
 		int typeOfMove;
-		int way; // -1 Esquerda / 1 Direita
+		//int way; // -1 Esquerda / 1 Direita
+		bool alive;
 };
 
 #endif

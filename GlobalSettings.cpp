@@ -25,8 +25,12 @@
 
 #define bgChar ' '
 
+bool allDrop = false;
+double spaceBtEnemies = 5;
 int numEnemyShots = 0;
 int numPlayerShots = 0;
+double globalVelocity = 5;
+int way = 1;
 
 using namespace std;
 

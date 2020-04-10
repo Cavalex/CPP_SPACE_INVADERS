@@ -11,11 +11,20 @@
 
 using namespace std;
 
-Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s)
+Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s, bool aliv)
 	: Entity (x, y, sAX, sAY, ch)
 {
 	this->name = n;
 	this->score = s;
+	this->alive = aliv;
+}
+
+Player::Player()
+	: Entity (-50, -50, 0, 0, ' ')
+{
+	this->name = "NULL";
+	this->score = 0;
+	this->alive = false;
 }
 
 bool Player::moveAction(){
@@ -56,3 +65,4 @@ void Player::shoot(int sX, int sY, char cha, int d){
 	Shot s = Shot(x, y - sizeY - 1, sX, sY, cha, d);
 }
 
+bool Player::isAlive(){ return alive; }
