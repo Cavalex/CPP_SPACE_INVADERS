@@ -6,6 +6,7 @@
 #include <conio.h>
 
 #include "GlobalSettings.cpp"
+#include "Game.h"
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -14,13 +15,14 @@ using namespace std;
 
 class Player : public Entity {
 	public:
-		Player(int, int, int, int, char, string, int, bool);
+		Player(int, int, int, int, char, string, int, bool, int);
 		Player();
-		bool moveAction();
-		void shoot(int, int, char, int);
+		void action(Game&);
+		//void shoot(int, int, char, int);
 		bool isAlive();
 		
 	private: 
+		int num;
 		int score;
 		string name;
 		bool alive;

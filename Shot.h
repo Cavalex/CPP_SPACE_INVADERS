@@ -12,11 +12,13 @@
 
 class Shot : public Entity {
 	public:
-		Shot(int, int, int, int, char, int);
+		Shot(int, int, int, int, char, int, bool);
 		Shot();
+		bool isALive();
 		
-	private: 
+	private:
 		int dmg;
+		bool alive;
 };
 
 #endif

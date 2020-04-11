@@ -24,15 +24,26 @@
 #define WIDTH 75
 
 #define bgChar ' '
+#define barrierChar 'H'
 
+using namespace std;
+
+int numShotsPP = 5; // numero de tiros por jogador
+
+char playerControls[4][3] = {{KEY_UP, KEY_LEFT, KEY_RIGHT},
+							{119, 97, 100}, // W, A, D
+							{105, 106, 108}, // I, J, L
+							{116, 102, 104}}; // T, F, H
+int barrierCharInt = 219;
 bool allDrop = false;
 double spaceBtEnemies = 5;
 int numEnemyShots = 0;
 int numPlayerShots = 0;
 double globalVelocity = 5;
-int way = 1;
+int way = 1; // -1 esquerda ; 1 direita
+int numBarriers = 8;
 
-using namespace std;
+string playersN[4] = {"Cavalex", "Joao", "Marco" ,"Matheus"};
 
 void SetCursorPosition(int x, int y){
 	HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);

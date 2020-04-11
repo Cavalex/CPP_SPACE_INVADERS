@@ -10,7 +10,6 @@
 #include "Entity.cpp"
 #include "Enemy.cpp"
 // O Menu ainda não está a dar e não nos precisamos de preocupar com isso agora
-//#include "Menu.cpp"
 #include "Player.cpp"
 #include "Timer.cpp"
 #include "Game.cpp"
@@ -22,7 +21,7 @@ using namespace std;
 
 // AGORA O JOGO
 int main(){
-	
+
 	// Mudar o tamanho da consola
 	SetConsoleSize(WIDTH, HEIGHT);
 	ClearScreen(bgChar);

@@ -4,17 +4,19 @@
 
 #include "GlobalSettings.cpp"
 
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef BARRIER_H
+#define BARRIER_H
 
 using namespace std;
 
 class Barrier : public Entity {
 	public:
-		Player(int, int, int, int, char, bool);
+		Barrier(int, int, int, int, char, bool);
+		Barrier();
+		void checkCol();
 		
 	private: 
-		bool isAlive;
+		bool alive;
 		
 };
 

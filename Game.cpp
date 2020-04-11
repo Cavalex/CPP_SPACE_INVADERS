@@ -21,6 +21,8 @@ Game::Game(int n, int p){
 
 void Game::start(){
 	
+	//menu();
+	
 	// fill enemies[]
 	for(int i = 0; i < numEnemies; i++){
 		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, 5, 1, 1, 'X', 10, 0, true);
@@ -28,9 +30,15 @@ void Game::start(){
 	}
 	
 	// fill players[]
-	for(int i = 0; i < numPlayers; i++){
-		players[i] = Player(WIDTH / 2, HEIGHT - 2 + 2 * i, 1, 0, 'O', "Cavalex", 0, true);
+	for(int i = 1; i <= numPlayers; i++){
+		players[i] = Player(WIDTH / 2, HEIGHT - 2 + 2 * i, 1, 0, 'O', playersN[i], 0, true, i);
 		players[i].drawEntity(); // Só para não ficar invisível no início
+	}
+	
+	// fill barriers[]
+	for(int i = 0; i < numBarriers; i++){
+		barriers[i] = Barrier(5 + 9*i, HEIGHT - 8, 1, 1, (char)barrierCharInt, true);
+		barriers[i].drawEntity(); // Só para não ficar invisível no início
 	}
 	
 	// game loop
@@ -38,6 +46,7 @@ void Game::start(){
     	
     	updateEnemies();
     	updatePlayers();
+    	updateBarriers();
 		
 		sleep(0.01);
     }
@@ -45,7 +54,7 @@ void Game::start(){
 
 void Game::updatePlayers(){
 	for(int i = 0; i < numPlayers; i++){
-		if (players[i].isAlive() == true) players[i].moveAction();
+		if (players[i].isAlive() == true) players[i].action(this);
 	}
 }
 
@@ -71,7 +80,8 @@ void Game::updateEnemies(){
 			else{
 				if (enemies[i].isAlive() == true){
 					enemies[i].moveHorizontally();
-				}	
+				}
+				if (i == numEnemies) break;
 			}
 		}
 		if (allDrop){
@@ -79,7 +89,7 @@ void Game::updateEnemies(){
 			for(int i = 0; i < numEnemies; i++){
 				if (enemies[i].isAlive() == true){
 				enemies[i].moveVertically();
-				}	
+				}
 			}
 			allDrop = false;
 		}
@@ -87,10 +97,17 @@ void Game::updateEnemies(){
 	}
 }
 
-/*
 void Game::updateBarriers(){
-	for(int i = 0; i < numPlayers; i++){
-		players[i].moveAction();
+	for(int i = 0; i < numBarriers; i++){
+		barriers[i].checkCol();
+	}
+}
+
+/*
+// o tiro do jogador
+void Game::playerShoot(){
+	if(i < (numShotsPP * numPlayers)){
+		if(playerMove1[0])
 	}
 }
 */

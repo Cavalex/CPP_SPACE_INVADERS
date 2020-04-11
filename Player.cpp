@@ -8,15 +8,17 @@
 #include "GlobalSettings.cpp"
 #include "Player.h"
 #include "Shot.cpp"
+#include "Game.h"
 
 using namespace std;
 
-Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s, bool aliv)
+Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s, bool aliv, int nu)
 	: Entity (x, y, sAX, sAY, ch)
 {
 	this->name = n;
 	this->score = s;
 	this->alive = aliv;
+	this->num = nu;
 }
 
 Player::Player()
@@ -25,9 +27,10 @@ Player::Player()
 	this->name = "NULL";
 	this->score = 0;
 	this->alive = false;
+	this->num = 0;
 }
 
-bool Player::moveAction(){
+void Player::action(Game game){
 	
 	if (kbhit()){
 		char key = getch();
@@ -35,10 +38,12 @@ bool Player::moveAction(){
 	    // movimento
 	    if (value != 0){
 	    	switch(value){
-		    	/*
-		        case KEY_UP:
-		            moveTo(x, y - 1);
-		            break;
+		        case playerControls[num-1][0]:
+		        	for(int i = 0; i < numShotsPP * numPlayers; i++){
+		        		if (!(game.shots[i].isALive())) game.shots[i] = Shot(x, y-1-sizeY, 0, 0, '|', 1, true);	
+					}
+					break;
+		        /*
 		        case KEY_DOWN:
 		            moveTo(x, y + 1);
 		            break;
@@ -53,10 +58,10 @@ bool Player::moveAction(){
 					break;
 		    }
 		}
-		return true;
 	}
 }
 
+/*
 void Player::shoot(int sX, int sY, char cha, int d){
 	// O tiro é logo eliminado quando a função acaba, 
 	// vamos ter de criar uma classe "Game" que "recorde" todos
@@ -64,5 +69,7 @@ void Player::shoot(int sX, int sY, char cha, int d){
 	// ou, para ser mais eficaz, criamos um array nas variáveis globais e colocamos lá o tiro.
 	Shot s = Shot(x, y - sizeY - 1, sX, sY, cha, d);
 }
+*/
 
 bool Player::isAlive(){ return alive; }
+
