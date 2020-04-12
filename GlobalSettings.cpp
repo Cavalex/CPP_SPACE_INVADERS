@@ -28,39 +28,44 @@
 
 using namespace std;
 
+// vamos ignorar esta primeira variável pq acrescentamos um cooldown nos tiros,
+// ter um limite de tiros é inútil
 int numShotsPP = 5; // numero de tiros por jogador
+int numTotalShots = 100;
 
-char playerControls[4][3] = {{KEY_UP, KEY_LEFT, KEY_RIGHT},
+const char playerControls[4][3] = {{KEY_UP, KEY_LEFT, KEY_RIGHT},
 							{119, 97, 100}, // W, A, D
 							{105, 106, 108}, // I, J, L
 							{116, 102, 104}}; // T, F, H
-int barrierCharInt = 219;
-bool allDrop = false;
-double spaceBtEnemies = 5;
-int numEnemyShots = 0;
-int numPlayerShots = 0;
-double globalVelocity = 5;
-int way = 1; // -1 esquerda ; 1 direita
-int numBarriers = 8;
+							
+// Já que os tiros estavam a dar o problema de recursão é melhor colocá-los aqui
+// na forma de um bool, que depois é atualizado na função updateShots() do Game.
+bool playerShot[4] = {false, false, false, false};
+int playerShotX[4] = {-1, -1, -1, -1}; // A posição onde é para colocar os tiros
+int playerShotY[4] = {-1, -1, -1, -1}; // A posição onde é para colocar os tiros
+int playerShotCD[4] = {0, 0, 0, 0}; // O cooldown dos tiros para evitar que os jogadores os spamem
+int shotCD = 3; // Para evitar que o jogador spame tiros
+
+int barrierCharInt = 219; // O caráter das barreiras em int
+bool allDrop = false; // variáel para fazer descer os inimigos em sintonia
+double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
+int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
+int numBarriers = 8; // numero de barreiras no jogo
+
+double shotVelocity = 7;
+double enemyVelocity = 5; // A velocidade dos inimigos, 5 é o ideal, 10 é rápido e 2 lento
+int way = 1; // sentido de movimento dos inimigos; -1 esquerda , 1 direita
 
 string playersN[4] = {"Cavalex", "Joao", "Marco" ,"Matheus"};
 
+// Colocar o ponteiro nas coordenadas dadas
 void SetCursorPosition(int x, int y){
 	HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD pos = {x,y};
 	SetConsoleCursorPosition(output, pos);
 }
 
-void timer(int n) {
-    // Tempo inicial
-    clock_t start_time = clock();
-
-    // Uma espécie de sleep, a função timer só acaba quando o while terminar,
-    //logo só termina quando se passar o tempo que colocamos no parâmetro.
-    while (clock() < start_time + n)
-		;
-}
-
+// Mudar o tamanho da consola
 void SetConsoleSize(int width, int height){
 	HANDLE wHnd;    // Handle to write to the console.
 	HANDLE rHnd;
@@ -78,6 +83,7 @@ void SetConsoleSize(int width, int height){
     SetConsoleScreenBufferSize(wHnd, bufferSize);
 }
 
+// "Limpar" a consola com o char dado -> útil para fazer "pausa" no jogo a meio e recomeçar
 void ClearScreen(char ch){
 	for (int y = 0; y < HEIGHT; y++){
 		for (int x = 0; x < WIDTH; x++){

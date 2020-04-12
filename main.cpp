@@ -24,8 +24,11 @@ int main(){
 
 	// Mudar o tamanho da consola
 	SetConsoleSize(WIDTH, HEIGHT);
+	
+	// Só para "limpar" o fundo, relativamete inútil
 	ClearScreen(bgChar);
 
+	// Criar o jogo com 20 inimigos e 1 jogador
 	Game game = Game(20, 1);
 	game.start();
 	

@@ -6,7 +6,6 @@
 #include <conio.h>
 
 #include "GlobalSettings.cpp"
-#include "Game.h"
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -17,8 +16,8 @@ class Player : public Entity {
 	public:
 		Player(int, int, int, int, char, string, int, bool, int);
 		Player();
-		void action(Game&);
-		//void shoot(int, int, char, int);
+		void action(); // o movimento e o disparo do jogador
+		void shoot();
 		bool isAlive();
 		
 	private: 
@@ -26,6 +25,8 @@ class Player : public Entity {
 		int score;
 		string name;
 		bool alive;
+		
+		//const int shootKey = playerControls[num-1][0];
 		
 };
 

@@ -8,7 +8,6 @@
 #include "GlobalSettings.cpp"
 #include "Player.h"
 #include "Shot.cpp"
-#include "Game.h"
 
 using namespace std;
 
@@ -30,7 +29,7 @@ Player::Player()
 	this->num = 0;
 }
 
-void Player::action(Game game){
+void Player::action(){
 	
 	if (kbhit()){
 		char key = getch();
@@ -38,19 +37,20 @@ void Player::action(Game game){
 	    // movimento
 	    if (value != 0){
 	    	switch(value){
-		        case playerControls[num-1][0]:
-		        	for(int i = 0; i < numShotsPP * numPlayers; i++){
-		        		if (!(game.shots[i].isALive())) game.shots[i] = Shot(x, y-1-sizeY, 0, 0, '|', 1, true);	
-					}
+	    		// Se disparar vai colocar a variável do disparo como verdadeira
+		        case KEY_UP:
+		        	shoot();
 					break;
 		        /*
 		        case KEY_DOWN:
 		            moveTo(x, y + 1);
 		            break;
 		        */
+		        // movimento para a esquerda
 		        case KEY_LEFT:
 		            moveTo(x - 1, y);
 					break;
+				// movimento para a direita
 		        case KEY_RIGHT:
 		            moveTo(x + 1, y);
 					break;
@@ -61,15 +61,12 @@ void Player::action(Game game){
 	}
 }
 
-/*
-void Player::shoot(int sX, int sY, char cha, int d){
-	// O tiro é logo eliminado quando a função acaba, 
-	// vamos ter de criar uma classe "Game" que "recorde" todos
-	// os dados do jogo e podemos acrescentar lá o Shot
-	// ou, para ser mais eficaz, criamos um array nas variáveis globais e colocamos lá o tiro.
-	Shot s = Shot(x, y - sizeY - 1, sX, sY, cha, d);
-}
-*/
-
+// Um get para saber se está vivo ou não, quase todas as classes têm isto
 bool Player::isAlive(){ return alive; }
+
+void Player::shoot(){
+	playerShot[num-1] = true;
+	playerShotX[num-1] = x;
+	playerShotY[num-1] = y + sizeY;
+}
 

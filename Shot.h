@@ -12,13 +12,20 @@
 
 class Shot : public Entity {
 	public:
-		Shot(int, int, int, int, char, int, bool);
+		Shot(int, int, int, int, char, int, bool, int);
 		Shot();
 		bool isALive();
+		void move();
+		void checkCol();
 		
 	private:
 		int dmg;
 		bool alive;
+		// os tiros do jogador e dos inimigos têm movimentos diferentes, 
+		// portanto vamos criar est variável para saber de quem são os tiros
+		// 1 -> jogador (de baixo para cima)
+		// 2 -> inimigo (de cima para baixo)
+		int type;
 };
 
 #endif

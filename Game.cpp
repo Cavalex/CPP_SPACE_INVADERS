@@ -9,10 +9,13 @@
 #include "Game.h"
 #include "Timer.cpp"
 #include "Enemy.h"
+#include "Shot.h"
 
 using namespace std;
 
+// O timer para o clock (o movimento dos inimigos)
 Timer t;
+Timer t2;
 
 Game::Game(int n, int p){
 	this->numEnemies = n;
@@ -23,47 +26,51 @@ void Game::start(){
 	
 	//menu();
 	
-	// fill enemies[]
+	// preencher enemies[]
 	for(int i = 0; i < numEnemies; i++){
 		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, 5, 1, 1, 'X', 10, 0, true);
 		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), 9, 1, 1, 'X', 10, 0, true);
 	}
 	
-	// fill players[]
+	// preencher players[]
 	for(int i = 1; i <= numPlayers; i++){
-		players[i] = Player(WIDTH / 2, HEIGHT - 2 + 2 * i, 1, 0, 'O', playersN[i], 0, true, i);
-		players[i].drawEntity(); // Só para não ficar invisível no início
+		players[i-1] = Player(WIDTH / 2, HEIGHT - 2 - 2 * i, 1, 0, 'O', playersN[i], 0, true, i);
+		players[i-1].drawEntity(); // Só para não ficarem invisiveis no início
 	}
 	
-	// fill barriers[]
+	// preencher barriers[]
 	for(int i = 0; i < numBarriers; i++){
 		barriers[i] = Barrier(5 + 9*i, HEIGHT - 8, 1, 1, (char)barrierCharInt, true);
-		barriers[i].drawEntity(); // Só para não ficar invisível no início
+		barriers[i].drawEntity(); // Só para não ficarem invisiveis no início
 	}
 	
 	// game loop
 	while(true){
     	
+    	// Isto era para testar
+    	//cout << players[0].x;
+    	//sleep(100);
+    	updateShots();
     	updateEnemies();
     	updatePlayers();
     	updateBarriers();
 		
+		// O usleep() estava a causar erros no movimento, decidimos usar o sleep() portanto
 		sleep(0.01);
     }
 }
 
 void Game::updatePlayers(){
 	for(int i = 0; i < numPlayers; i++){
-		if (players[i].isAlive() == true) players[i].action(this);
+		if (players[i].isAlive() == true) players[i].action();
 	}
 }
-
 
 void Game::updateEnemies(){
 	
 	int checkedCol = false;
 	
-	if (t.getTimePassed()>=1/(globalVelocity)){
+	if (t.getTimePassed()>=1/(enemyVelocity)){
 		for(int i = 0; i < numEnemies*2; i++){
 			// Para ver se algum inimigo colidiu com a parede antes de movê-los
 			// Daí o numEnemies*2, para fazer tudo no mesmo for
@@ -84,6 +91,7 @@ void Game::updateEnemies(){
 				if (i == numEnemies) break;
 			}
 		}
+		// Se algum deles colidir com a barreira então descem todos ao mesmo tempo
 		if (allDrop){
 			way = -way;
 			for(int i = 0; i < numEnemies; i++){
@@ -103,11 +111,45 @@ void Game::updateBarriers(){
 	}
 }
 
-/*
-// o tiro do jogador
-void Game::playerShoot(){
-	if(i < (numShotsPP * numPlayers)){
-		if(playerMove1[0])
+void Game::updateShots(){
+	
+	// Se alguém disparar, criar o tiro no array
+	for(int i = 0; i < numTotalShots; i++){
+	//for(int i = 0; i < numShotsPP * numPlayers; i++){
+		if(!(shots[i].isALive())){
+			for(int n = 0; n < numPlayers; n++){
+				if(playerShot[n] == true && playerShotCD[n] <= 0){
+					shots[i] = Shot(playerShotX[n], playerShotY[n], 0, 0, '|', 1, true, 1);
+					playerShot[n] = false;
+					playerShotCD[n] += shotCD;
+				}
+			}
+		}
+	//}
+	}
+	
+	// Temos que atualizar aqui os tiros, se o fizermos na classe Shot arriscamo-nos
+	// a ter um problema de recursão novamente, porque para atualizarmos o array
+	// precisavamos de um "game", e o resto já se sabe
+	// Se calhar podemos resolver assim o problema do player
+	
+	// Mesma estrutura que o updateEnemies(), têm que se mover todos ao mesmo tempo
+	if (t2.getTimePassed()>=1/(shotVelocity)){
+		
+		for(int i = 0; i < numPlayers; i++) playerShotCD[i] -= 1;
+		
+		for(int i = 0; i < numTotalShots; i++){
+			if(shots[i].isALive()){
+				shots[i].move();
+			}
+		}
+
+		for(int i = 0; i < numTotalShots; i++){
+			if(shots[i].isALive()){
+				shots[i].checkCol();
+			}
+		}
+		t2.restart();
 	}
 }
-*/
+

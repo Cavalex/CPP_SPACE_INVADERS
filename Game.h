@@ -10,7 +10,7 @@
 #include "GlobalSettings.cpp"
 
 #include "Enemy.h"
-#include "Player.cpp"
+#include "Player.h"
 #include "Shot.h"
 #include "Timer.cpp"
 #include "Barrier.cpp"
@@ -27,17 +27,19 @@ class Game {
 		void updateBarriers();
 		void start();
 		void menu();
-		void playerShoot();
 		
 		int numEnemies;
 		int numPlayers;
 		
+		// Têm que ser públicas para evitar usar gets de arrays que podem complicar muito o código e
+		// não poupam linhas, assim tbm fica mais fácil de ler
 		Enemy enemies[100];
 		Player players[4];
 		//Shot shots[numShotsPP * numPlayers];
 		Shot shots[1000];
 		Barrier barriers[100];
 		
+	// não funcionam com protected, públicas it is
 	/*
 	protected:
 		// É necessário um construtor vazio para preencher os arrays
