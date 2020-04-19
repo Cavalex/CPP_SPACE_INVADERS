@@ -47,6 +47,10 @@ void Enemy::moveVertically(){
 	moveTo(x, y + 1);
 }
 
+void Enemy::setLife(bool b){
+	alive = b;
+}
+
 bool Enemy::collidedWall(){
 	if ((x - sizeX <= 1 && way == -1) || (x + sizeX >= WIDTH - 2 && way == 1)) return true;
 	else return false;

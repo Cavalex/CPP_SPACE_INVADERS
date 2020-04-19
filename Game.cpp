@@ -27,9 +27,55 @@ void Game::start(){
 	//menu();
 	
 	// preencher enemies[]
-	for(int i = 0; i < numEnemies; i++){
+	int i = 0;
+	while (i < numEnemies){
+		
+		/*
 		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, 5, 1, 1, 'X', 10, 0, true);
 		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), 9, 1, 1, 'X', 10, 0, true);
+		i++;
+		*/
+		
+		enemies[i] = Enemy(4 + (spaceBtEnemies - 1)*i, 5, 0, 0, 'X', 10, 0, true);
+		i++;
+		
+		int size = 9;
+		char draw[9] = {' ', 219, ' ',
+						219, 219, 219,
+						' ', '|', ' '};
+		
+		/*
+		if(i <= numEnemies/2 - 1){
+			// Queremos criar 10 inimigos 3x3, ou seja 90 inimigos
+			for(int z = 0; z < size; z++){
+				enemies[i] = Enemy((4 + (z%(size/3)) + spaceBtEnemies*((i/size))), 4 + size/3, 0, 0, draw[z], 10, 0, true);
+				i++;
+			}
+		}
+		
+		else {
+			// Aqui criamos os outros 10 inimigos, mais 90
+			for(int z = 0; z < size; z++){
+				enemies[i] = Enemy((4 + (z%(size/3)) + spaceBtEnemies*((i/size))), 9 + size/3, 0, 0, draw[z], 10, 0, true);
+				i++;
+			}
+		}
+		*/
+		
+		/*
+		if(i <= numEnemies/2 - 1){
+			// Inimigos 3x3
+			for(int z = 0; z < size; z++){
+				if(z < size/3) enemies[i] = Enemy(4 + spaceBtEnemies*i + ((z % 3) + 1), 5 + size/3, 0, 0, draw[z], 10, 0, true);
+			}
+		}
+		else {
+			// Inimigos 3x3
+			for(int z = 0; z < size; z++){
+				if(z < size/3) enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2) + ((z % 3) + 1), 9 + size/3, 0, 0, draw[z], 10, 0, true);
+			}	
+		}
+		*/
 	}
 	
 	// preencher players[]
@@ -54,10 +100,26 @@ void Game::start(){
     	updateEnemies();
     	updatePlayers();
     	updateBarriers();
+    	checkCols();
 		
 		// O usleep() estava a causar erros no movimento, decidimos usar o sleep() portanto
 		sleep(0.01);
     }
+}
+
+void Game::checkCols(){
+	for(int i = 0; i < numEnemies; i++){
+		for(int s = 0; s < 100; s++){
+			if( (((enemies[i].getX() + enemies[i].getSizeX()) == (shots[s].getX() + shots[s].getSizeX()))
+			&&  ((enemies[i].getY() + enemies[i].getSizeY()) == (shots[s].getY() + shots[s].getSizeY())) )
+			&& (enemies[i].isAlive() && shots[s].isALive())){
+				shots[s].setLife(false);
+				enemies[i].setLife(false);
+				shots[s].clearEntity();
+				enemies[i].clearEntity();
+			}
+		}
+	}
 }
 
 void Game::updatePlayers(){
@@ -102,6 +164,7 @@ void Game::updateEnemies(){
 			allDrop = false;
 		}
 		t.restart();
+		checkCols();
 	}
 }
 
@@ -149,6 +212,7 @@ void Game::updateShots(){
 				shots[i].checkCol();
 			}
 		}
+		checkCols();
 		t2.restart();
 	}
 }

@@ -28,6 +28,8 @@ class Game {
 		void start();
 		void menu();
 		
+		void checkCols();
+		
 		int numEnemies;
 		int numPlayers;
 		
@@ -36,7 +38,7 @@ class Game {
 		Enemy enemies[100];
 		Player players[4];
 		//Shot shots[numShotsPP * numPlayers];
-		Shot shots[1000];
+		Shot shots[100];
 		Barrier barriers[100];
 		
 	// não funcionam com protected, públicas it is

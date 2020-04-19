@@ -21,7 +21,7 @@
 #define KEY_X 120
 
 #define HEIGHT 35
-#define WIDTH 75
+#define WIDTH 90
 
 #define bgChar ' '
 #define barrierChar 'H'
@@ -33,8 +33,13 @@ using namespace std;
 int numShotsPP = 5; // numero de tiros por jogador
 int numTotalShots = 100;
 
-const char playerControls[4][3] = {{KEY_UP, KEY_LEFT, KEY_RIGHT},
+char playerControls[4][3] = {{72, 75, 77},
 							{119, 97, 100}, // W, A, D
+							{105, 106, 108}, // I, J, L
+							{116, 102, 104}}; // T, F, H
+
+char playerControls2[4][3] = {{VK_UP, VK_LEFT, VK_RIGHT},
+							{'W', 'A', 'D'}, // W, A, D
 							{105, 106, 108}, // I, J, L
 							{116, 102, 104}}; // T, F, H
 							
@@ -44,7 +49,7 @@ bool playerShot[4] = {false, false, false, false};
 int playerShotX[4] = {-1, -1, -1, -1}; // A posição onde é para colocar os tiros
 int playerShotY[4] = {-1, -1, -1, -1}; // A posição onde é para colocar os tiros
 int playerShotCD[4] = {0, 0, 0, 0}; // O cooldown dos tiros para evitar que os jogadores os spamem
-int shotCD = 3; // Para evitar que o jogador spame tiros
+int shotCD = 6; // Para evitar que o jogador spame tiros
 
 int barrierCharInt = 219; // O caráter das barreiras em int
 bool allDrop = false; // variáel para fazer descer os inimigos em sintonia
@@ -52,7 +57,7 @@ double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
 int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
 int numBarriers = 8; // numero de barreiras no jogo
 
-double shotVelocity = 7;
+double shotVelocity = 7; // A velocidade dos tiros
 double enemyVelocity = 5; // A velocidade dos inimigos, 5 é o ideal, 10 é rápido e 2 lento
 int way = 1; // sentido de movimento dos inimigos; -1 esquerda , 1 direita
 

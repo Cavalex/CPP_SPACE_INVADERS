@@ -19,6 +19,7 @@ class Player : public Entity {
 		void action(); // o movimento e o disparo do jogador
 		void shoot();
 		bool isAlive();
+		//int shootKey = playerControls[num-1][0];
 		
 	private: 
 		int num;

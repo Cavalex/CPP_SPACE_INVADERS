@@ -30,11 +30,18 @@ bool Shot::isALive(){
 	return alive;
 }
 
+void Shot::setLife(bool b){
+	alive = b;
+}
+
 void Shot::move(){
-	if(type == 1) moveTo(x, y-1);
-	else if(type == 2) moveTo(x, y+1);
+	if(type == 1) moveTo(x, y-1); // tiro jogador
+	else if(type == -1) moveTo(x, y+1); // tiro inimigo
 }
 
 void Shot::checkCol(){
-	int a = 0;
+	if(y <= 1){
+		alive = false;
+		clearEntity();
+	}
 }

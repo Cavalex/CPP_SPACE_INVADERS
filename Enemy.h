@@ -18,6 +18,7 @@ class Enemy : public Entity {
 		void moveVertically();
 		bool collidedWall();
 		double getVelocity();
+		void setLife(bool);
 		bool isAlive();
 		
 	private:

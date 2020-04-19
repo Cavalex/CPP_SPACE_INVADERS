@@ -36,27 +36,31 @@ void Player::action(){
 		int value = key;
 	    // movimento
 	    if (value != 0){
-	    	switch(value){
-	    		// Se disparar vai colocar a variável do disparo como verdadeira
-		        case KEY_UP:
-		        	shoot();
-					break;
-		        /*
-		        case KEY_DOWN:
-		            moveTo(x, y + 1);
-		            break;
-		        */
-		        // movimento para a esquerda
-		        case KEY_LEFT:
-		            moveTo(x - 1, y);
-					break;
-				// movimento para a direita
-		        case KEY_RIGHT:
-		            moveTo(x + 1, y);
-					break;
-				default:
-					break;
-		    }
+	    	
+	    	/*
+    		// Se disparar vai colocar a variável do disparo como verdadeira
+	        if(value == playerControls[num-1][0])
+	        	shoot();
+	        // movimento para a esquerda
+	        if(value == playerControls[num-1][1])
+	            moveTo(x - 1, y);
+			// movimento para a direita
+	        if(value == playerControls[num-1][2])
+	            moveTo(x + 1, y);
+	        */
+	        
+			if(GetKeyState(playerControls2[num-1][0]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
+			{
+			    shoot();
+			}
+	        if(GetKeyState(playerControls2[num-1][1]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
+			{
+			    moveTo(x - 1, y);
+			}
+			if(GetKeyState(playerControls2[num-1][2]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
+			{
+			    moveTo(x + 1, y);
+			}
 		}
 	}
 }
