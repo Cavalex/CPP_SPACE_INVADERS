@@ -40,7 +40,7 @@ void Shot::move(){
 }
 
 void Shot::checkCol(){
-	if(y <= 1){
+	if(y <= 1 || y >= HEIGHT - 2){
 		alive = false;
 		clearEntity();
 	}

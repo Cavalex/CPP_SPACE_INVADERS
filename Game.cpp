@@ -30,19 +30,24 @@ void Game::start(){
 	int i = 0;
 	while (i < numEnemies){
 		
+		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true);
+		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true);
+		i++;
+		
+		// 20 inimigos 
+		
 		/*
-		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, 5, 1, 1, 'X', 10, 0, true);
-		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), 9, 1, 1, 'X', 10, 0, true);
+		enemies1[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit, 0, 0, 'X', 10, 0, true);
+		enemies2[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + enemyYDifference, 0, 0, 'X', 10, 0, true);
+		enemies3[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + 2 * enemyYDifference, 0, 0, 'X', 10, 0, true);
 		i++;
 		*/
-		
-		enemies[i] = Enemy(4 + (spaceBtEnemies - 1)*i, 5, 0, 0, 'X', 10, 0, true);
-		i++;
 		
 		int size = 9;
 		char draw[9] = {' ', 219, ' ',
 						219, 219, 219,
 						' ', '|', ' '};
+		
 		
 		/*
 		if(i <= numEnemies/2 - 1){
@@ -90,13 +95,20 @@ void Game::start(){
 		barriers[i].drawEntity(); // Só para não ficarem invisiveis no início
 	}
 	
+	//preencher shots[]
+	for(int i = 0; i < numTotalShots; i++){
+		shots[i] = Shot(-50, -50, 0, 0, ' ', 0, false, 0);
+	}
+	
 	// game loop
 	while(true){
+		srand(time(NULL));
     	
     	// Isto era para testar
     	//cout << players[0].x;
     	//sleep(100);
     	updateShots();
+    	updateEnemyShots();
     	updateEnemies();
     	updatePlayers();
     	updateBarriers();
@@ -110,13 +122,32 @@ void Game::start(){
 void Game::checkCols(){
 	for(int i = 0; i < numEnemies; i++){
 		for(int s = 0; s < 100; s++){
-			if( (((enemies[i].getX() + enemies[i].getSizeX()) == (shots[s].getX() + shots[s].getSizeX()))
-			&&  ((enemies[i].getY() + enemies[i].getSizeY()) == (shots[s].getY() + shots[s].getSizeY())) )
-			&& (enemies[i].isAlive() && shots[s].isALive())){
-				shots[s].setLife(false);
-				enemies[i].setLife(false);
-				shots[s].clearEntity();
-				enemies[i].clearEntity();
+			// Estes dois fors são para dar loop a cada "bloco" do inimigo
+			for(int ye = -enemies[i].getSizeY(); ye <= enemies[i].getSizeY(); ye++){
+				for(int xe = -enemies[i].getSizeX(); xe <= enemies[i].getSizeX(); xe++){
+					// Colisõessssssss
+					if( ( ((enemies[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
+					&&  ((enemies[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
+					&& (enemies[i].isAlive() && shots[s].isALive()) ){
+						// Matá-los e apagá-los
+						shots[s].setLife(false);
+						enemies[i].setLife(false);
+						shots[s].clearEntity();
+						enemies[i].clearEntity();
+					}
+					
+					// Colisões antigas
+					/*
+					if( ( ((enemies[i].getX() + enemies[i].getSizeX()) == (shots[s].getX() + shots[s].getSizeX() ))
+					&&  ((enemies[i].getY() + enemies[i].getSizeY()) == (shots[s].getY() + shots[s].getSizeY() )) )
+					&& (enemies[i].isAlive() && shots[s].isALive()) ){
+						shots[s].setLife(false);
+						enemies[i].setLife(false);
+						shots[s].clearEntity();
+						enemies[i].clearEntity();
+					}
+					*/
+				}
 			}
 		}
 	}
@@ -174,6 +205,39 @@ void Game::updateBarriers(){
 	}
 }
 
+void Game::updateEnemyShots(){
+	for(int i = 0; i < numEnemies; i++){
+		for(int s = 0; s < numEnemies; s++){
+			// Se o inimigo não tiver ninguém em baixo dele:
+			/*
+			if ( (!(enemies[i].x == enemies[s].x)) || (
+			!(  (enemies[i].y == enemies[s].y + enemyYDifference)
+			|| (enemies[i].y == enemies[s].y + 2*enemyYDifference)
+			|| (enemies[i].y == enemies[s].y + 3*enemyYDifference)
+			|| (enemies[i].y == enemies[s].y + 4*enemyYDifference) )
+			) && enemies[s].isAlive())
+			*/
+			if(enemies[s].isAlive() && enemies[i].isAlive())
+			{
+				canShoot = true;
+			}
+			else canShoot = false;
+		}
+		if(canShoot){
+			//int r = getRandomNumber(1, shotChance);
+			int r = 1;
+			if(r == 1){
+				for(int t = 0; t < numTotalShots; t++){
+					if(!(shots[t].isALive())){
+						shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, '|', 1, true, -1);
+					}
+				}
+			}
+		}
+		canShoot = true;
+	}
+}
+
 void Game::updateShots(){
 	
 	// Se alguém disparar, criar o tiro no array
@@ -215,5 +279,69 @@ void Game::updateShots(){
 		checkCols();
 		t2.restart();
 	}
+	
+	/*
+	if(r == 1){
+		if(ignore5 == false){
+			for(int i = 0; i < enemies5.size(); i++){
+				if(!(enemies5[i].isAlive()) && continue5 == false){
+					ignore5 = true;
+				}
+				else {
+					ignore5 = false;
+					continue5 = true;
+				}
+			}
+			continue5 = false;
+		}
+		
+		if(ignore4 == false){
+			for(int i = 0; i < enemies4.size(), i++){
+				if(!(enemies4[i].isAlive()) && continue4 == false){
+					ignore4 = true;
+				}
+				else {
+					ignore4 = false;
+					continue4 = true;
+				}
+			}
+			continue4 = false;
+		}
+	
+		if(ignore3 == false){
+			for(int i = 0; i < enemies3.size(), i++){
+				if(!(enemies3[i].isAlive()) && continue3 == false){
+					ignore3 = true;
+				}
+				else {
+					ignore3 = false;
+					continue3 = false;
+				}
+			}
+			continue3 = false;
+		}
+		
+		if(ignore2 == false){
+			for(int i = 0; i < enemies2.size(), i++){
+				if(!(enemies2[i].isAlive()) && continue2 == false){
+					ignore2 = true;
+				}
+				else {
+					ignore2 = false;
+					continue2 = false;
+				}
+			}
+			continue2 = false;
+		}
+	}
+	*/
 }
+
+
+
+
+
+
+
+
 

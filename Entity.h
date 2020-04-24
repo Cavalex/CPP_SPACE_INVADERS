@@ -33,20 +33,22 @@ class Entity {
 		char getCh();
 		
 		// Estas estão públicas para facilitar a leitura e poupar linhas de código
-		/*
+		
 		int x;
 		int y;
 		int sizeX;
 		int sizeY;
 		char ch;
-		*/
 		
+		
+		/*
 	protected:
 		int x;
 		int y;
 		int sizeX;
 		int sizeY;
 		char ch;
+		*/
 };
 
 #endif
