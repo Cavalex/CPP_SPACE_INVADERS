@@ -15,7 +15,8 @@ class Shot : public Entity {
 		Shot(int, int, int, int, char, int, bool, int);
 		Shot();
 		void setLife(bool);
-		bool isALive();
+		void checkAlive();
+		bool isAlive();
 		void move();
 		void checkCol();
 		

@@ -26,7 +26,13 @@ Shot::Shot()
 	this->type = 0;
 }
 
-bool Shot::isALive(){
+void Shot::checkAlive(){
+	if(x < 0 || y < 0){
+		alive = false;
+	}
+}
+
+bool Shot::isAlive(){
 	return alive;
 }
 

@@ -26,6 +26,7 @@ class Game {
 		void updateShots();
 		void updateBarriers();
 		void updateEnemyShots();
+		void updatePlayerShots();
 		void start();
 		void menu();
 		
@@ -36,11 +37,11 @@ class Game {
 		
 		// Têm que ser públicas para evitar usar gets de arrays que podem complicar muito o código e
 		// não poupam linhas, assim tbm fica mais fácil de ler
-		Enemy enemies[100];
+		Enemy enemies[50];
 		
 		Player players[4];
 		//Shot shots[numShotsPP * numPlayers];
-		Shot shots[200];
+		Shot shots[400];
 		Barrier barriers[100];
 		
 	// não funcionam com protected, públicas it is

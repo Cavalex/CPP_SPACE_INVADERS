@@ -32,7 +32,7 @@ using namespace std;
 // vamos ignorar esta primeira variável pq acrescentamos um cooldown nos tiros,
 // ter um limite de tiros é inútil
 int numShotsPP = 5; // numero de tiros por jogador
-int numTotalShots = 200;
+int numTotalShots = 400;
 
 char playerControls[4][3] = {{72, 75, 77},
 							{119, 97, 100}, // W, A, D
@@ -62,7 +62,7 @@ bool ignore2 = false;
 bool continue2 = false;
 
 bool canShoot = true;
-int shotChance = 2; // > dispara menos vezes; < dispara mais vezes
+int shotChance = 30; // > dispara menos vezes; < dispara mais vezes
 int enemyYInit = 5; // X inicial dos inimigos da primeira linha
 int enemyYDifference = 4; // A diferença entre os X's dos inimigos da primeira linha para a segunda
 int barrierCharInt = 219; // O caráter das barreiras em int

@@ -95,7 +95,7 @@ void Game::start(){
 		barriers[i].drawEntity(); // Só para não ficarem invisiveis no início
 	}
 	
-	//preencher shots[]
+	// preencher shots[]
 	for(int i = 0; i < numTotalShots; i++){
 		shots[i] = Shot(-50, -50, 0, 0, ' ', 0, false, 0);
 	}
@@ -107,15 +107,26 @@ void Game::start(){
     	// Isto era para testar
     	//cout << players[0].x;
     	//sleep(100);
-    	updateShots();
+    	updatePlayerShots();
     	updateEnemyShots();
+    	updateShots();
     	updateEnemies();
     	updatePlayers();
     	updateBarriers();
     	checkCols();
+    	
+    	
+    	int a = 0;
+    	for(int i = 0; i < numTotalShots; i++){
+			if(shots[i].isAlive()){
+				a++;
+			}
+		}
+		SetCursorPosition(0, 0);
+		cout << "Alive Shots: " << a;
 		
 		// O usleep() estava a causar erros no movimento, decidimos usar o sleep() portanto
-		sleep(0.01);
+		//sleep(0.01);
     }
 }
 
@@ -128,7 +139,7 @@ void Game::checkCols(){
 					// Colisõessssssss
 					if( ( ((enemies[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
 					&&  ((enemies[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
-					&& (enemies[i].isAlive() && shots[s].isALive()) ){
+					&& (enemies[i].isAlive() && shots[s].isAlive()) ){
 						// Matá-los e apagá-los
 						shots[s].setLife(false);
 						enemies[i].setLife(false);
@@ -140,7 +151,7 @@ void Game::checkCols(){
 					/*
 					if( ( ((enemies[i].getX() + enemies[i].getSizeX()) == (shots[s].getX() + shots[s].getSizeX() ))
 					&&  ((enemies[i].getY() + enemies[i].getSizeY()) == (shots[s].getY() + shots[s].getSizeY() )) )
-					&& (enemies[i].isAlive() && shots[s].isALive()) ){
+					&& (enemies[i].isAlive() && shots[s].isAlive()) ){
 						shots[s].setLife(false);
 						enemies[i].setLife(false);
 						shots[s].clearEntity();
@@ -206,44 +217,15 @@ void Game::updateBarriers(){
 }
 
 void Game::updateEnemyShots(){
-	for(int i = 0; i < numEnemies; i++){
-		for(int s = 0; s < numEnemies; s++){
-			// Se o inimigo não tiver ninguém em baixo dele:
-			/*
-			if ( (!(enemies[i].x == enemies[s].x)) || (
-			!(  (enemies[i].y == enemies[s].y + enemyYDifference)
-			|| (enemies[i].y == enemies[s].y + 2*enemyYDifference)
-			|| (enemies[i].y == enemies[s].y + 3*enemyYDifference)
-			|| (enemies[i].y == enemies[s].y + 4*enemyYDifference) )
-			) && enemies[s].isAlive())
-			*/
-			if(enemies[s].isAlive() && enemies[i].isAlive())
-			{
-				canShoot = true;
-			}
-			else canShoot = false;
-		}
-		if(canShoot){
-			//int r = getRandomNumber(1, shotChance);
-			int r = 1;
-			if(r == 1){
-				for(int t = 0; t < numTotalShots; t++){
-					if(!(shots[t].isALive())){
-						shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, '|', 1, true, -1);
-					}
-				}
-			}
-		}
-		canShoot = true;
-	}
+	int a = 1;
 }
 
-void Game::updateShots(){
+void Game::updatePlayerShots(){
 	
 	// Se alguém disparar, criar o tiro no array
 	for(int i = 0; i < numTotalShots; i++){
 	//for(int i = 0; i < numShotsPP * numPlayers; i++){
-		if(!(shots[i].isALive())){
+		if(!(shots[i].isAlive())){
 			for(int n = 0; n < numPlayers; n++){
 				if(playerShot[n] == true && playerShotCD[n] <= 0){
 					shots[i] = Shot(playerShotX[n], playerShotY[n], 0, 0, '|', 1, true, 1);
@@ -254,6 +236,9 @@ void Game::updateShots(){
 		}
 	//}
 	}
+}
+
+void Game::updateShots(){
 	
 	// Temos que atualizar aqui os tiros, se o fizermos na classe Shot arriscamo-nos
 	// a ter um problema de recursão novamente, porque para atualizarmos o array
@@ -263,16 +248,54 @@ void Game::updateShots(){
 	// Mesma estrutura que o updateEnemies(), têm que se mover todos ao mesmo tempo
 	if (t2.getTimePassed()>=1/(shotVelocity)){
 		
-		for(int i = 0; i < numPlayers; i++) playerShotCD[i] -= 1;
+		// Tiros dos inimigos
 		
+		for(int i = 0; i < numEnemies; i++){
+			for(int s = 0; s < numEnemies; s++){
+				// Se o inimigo não tiver ninguém em baixo dele:
+				
+				if ( canShoot && (!(enemies[i].x == enemies[s].x)) || (
+				!(  (enemies[i].y == enemies[s].y + enemyYDifference)
+				|| (enemies[i].y == enemies[s].y + 2*enemyYDifference)
+				|| (enemies[i].y == enemies[s].y + 3*enemyYDifference)
+				|| (enemies[i].y == enemies[s].y + 4*enemyYDifference) )
+				) && enemies[s].isAlive() && enemies[i].isAlive())
+					canShoot = true;
+				else canShoot = false;
+				/*
+				if(enemies[s].isAlive() && enemies[i].isAlive())
+				{
+					canShoot = true;
+				}
+				else canShoot = false;
+				*/
+			}
+			if(canShoot){
+				int r = getRandomNumber(1, shotChance);
+				//int r = 1;
+				if(r == 1){
+					for(int t = 0; (t < numTotalShots && canShoot); t++){
+						if(!(shots[t].isAlive())){
+							shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, '0', 1, true, -1);
+							canShoot = false;
+							break;
+						}
+					}
+				}
+			}
+			canShoot = true;
+		}
+		
+		for(int i = 0; i < numPlayers; i++) playerShotCD[i] -= 1;
+
 		for(int i = 0; i < numTotalShots; i++){
-			if(shots[i].isALive()){
+			if(shots[i].isAlive()){
 				shots[i].move();
 			}
 		}
 
 		for(int i = 0; i < numTotalShots; i++){
-			if(shots[i].isALive()){
+			if(shots[i].isAlive()){
 				shots[i].checkCol();
 			}
 		}
