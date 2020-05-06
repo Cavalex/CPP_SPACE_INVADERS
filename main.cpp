@@ -21,6 +21,8 @@ using namespace std;
 
 // AGORA O JOGO
 int main(){
+	
+	srand(time(NULL));
 
 	// Mudar o tamanho da consola
 	SetConsoleSize(WIDTH, HEIGHT);

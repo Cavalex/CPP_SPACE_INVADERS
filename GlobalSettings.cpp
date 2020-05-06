@@ -61,7 +61,7 @@ bool continue3 = false;
 bool ignore2 = false;
 bool continue2 = false;
 
-bool canShoot = true;
+bool canShoot = true; // variável para sabermos se um inimigo pode ou não disparar
 int shotChance = 30; // > dispara menos vezes; < dispara mais vezes
 int enemyYInit = 5; // X inicial dos inimigos da primeira linha
 int enemyYDifference = 4; // A diferença entre os X's dos inimigos da primeira linha para a segunda

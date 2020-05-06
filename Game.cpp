@@ -102,11 +102,7 @@ void Game::start(){
 	
 	// game loop
 	while(true){
-		srand(time(NULL));
     	
-    	// Isto era para testar
-    	//cout << players[0].x;
-    	//sleep(100);
     	updatePlayerShots();
     	updateEnemyShots();
     	updateShots();
@@ -115,7 +111,7 @@ void Game::start(){
     	updateBarriers();
     	checkCols();
     	
-    	
+    	// TESTE
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
@@ -123,10 +119,13 @@ void Game::start(){
 			}
 		}
 		SetCursorPosition(0, 0);
-		cout << "Alive Shots: " << a;
+		cout << "Alive Shots: " << a << " ";
+		cout << "|| Can Enemy Shoot?: " << canShoot;
+		if(!canShoot){ cout << " || UPDATED";}
+		else{ cout << " ";}
 		
 		// O usleep() estava a causar erros no movimento, decidimos usar o sleep() portanto
-		//sleep(0.01);
+		sleep(0.01);
     }
 }
 
@@ -146,18 +145,6 @@ void Game::checkCols(){
 						shots[s].clearEntity();
 						enemies[i].clearEntity();
 					}
-					
-					// Colisões antigas
-					/*
-					if( ( ((enemies[i].getX() + enemies[i].getSizeX()) == (shots[s].getX() + shots[s].getSizeX() ))
-					&&  ((enemies[i].getY() + enemies[i].getSizeY()) == (shots[s].getY() + shots[s].getSizeY() )) )
-					&& (enemies[i].isAlive() && shots[s].isAlive()) ){
-						shots[s].setLife(false);
-						enemies[i].setLife(false);
-						shots[s].clearEntity();
-						enemies[i].clearEntity();
-					}
-					*/
 				}
 			}
 		}
@@ -249,35 +236,46 @@ void Game::updateShots(){
 	if (t2.getTimePassed()>=1/(shotVelocity)){
 		
 		// Tiros dos inimigos
-		
 		for(int i = 0; i < numEnemies; i++){
 			for(int s = 0; s < numEnemies; s++){
 				// Se o inimigo não tiver ninguém em baixo dele:
-				
-				if ( canShoot && (!(enemies[i].x == enemies[s].x)) || (
-				!(  (enemies[i].y == enemies[s].y + enemyYDifference)
-				|| (enemies[i].y == enemies[s].y + 2*enemyYDifference)
-				|| (enemies[i].y == enemies[s].y + 3*enemyYDifference)
-				|| (enemies[i].y == enemies[s].y + 4*enemyYDifference) )
-				) && enemies[s].isAlive() && enemies[i].isAlive())
-					canShoot = true;
-				else canShoot = false;
-				/*
-				if(enemies[s].isAlive() && enemies[i].isAlive())
-				{
-					canShoot = true;
+				if(enemies[i].isAlive()){
+					if(enemies[s].isAlive()){
+						if (enemies[s].x == enemies[i].x){
+							if(!(enemies[s].y > enemies[i].y)){
+								canShoot = true;
+							}
+							else{
+								canShoot = false;
+								// TESTE
+								/*
+								SetCursorPosition(enemies[i].x, enemies[i].y);
+								cout << "CANT";
+								*/
+								break;
+							}
+						}
+					}
 				}
-				else canShoot = false;
-				*/
+				else{
+					canShoot = false;
+				}
 			}
 			if(canShoot){
 				int r = getRandomNumber(1, shotChance);
 				//int r = 1;
-				if(r == 1){
-					for(int t = 0; (t < numTotalShots && canShoot); t++){
+				// TESTE
+				SetCursorPosition(0, 1);
+				cout << "r: " << r << " ";
+				if(r == 10){
+					// TESTE
+					/*
+					SetCursorPosition(enemies[i].x, enemies[i].y);
+					cout << "SHOT";
+					*/
+					for(int t = 0; t < numTotalShots; t++){
 						if(!(shots[t].isAlive())){
 							shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, '0', 1, true, -1);
-							canShoot = false;
 							break;
 						}
 					}
@@ -302,62 +300,6 @@ void Game::updateShots(){
 		checkCols();
 		t2.restart();
 	}
-	
-	/*
-	if(r == 1){
-		if(ignore5 == false){
-			for(int i = 0; i < enemies5.size(); i++){
-				if(!(enemies5[i].isAlive()) && continue5 == false){
-					ignore5 = true;
-				}
-				else {
-					ignore5 = false;
-					continue5 = true;
-				}
-			}
-			continue5 = false;
-		}
-		
-		if(ignore4 == false){
-			for(int i = 0; i < enemies4.size(), i++){
-				if(!(enemies4[i].isAlive()) && continue4 == false){
-					ignore4 = true;
-				}
-				else {
-					ignore4 = false;
-					continue4 = true;
-				}
-			}
-			continue4 = false;
-		}
-	
-		if(ignore3 == false){
-			for(int i = 0; i < enemies3.size(), i++){
-				if(!(enemies3[i].isAlive()) && continue3 == false){
-					ignore3 = true;
-				}
-				else {
-					ignore3 = false;
-					continue3 = false;
-				}
-			}
-			continue3 = false;
-		}
-		
-		if(ignore2 == false){
-			for(int i = 0; i < enemies2.size(), i++){
-				if(!(enemies2[i].isAlive()) && continue2 == false){
-					ignore2 = true;
-				}
-				else {
-					ignore2 = false;
-					continue2 = false;
-				}
-			}
-			continue2 = false;
-		}
-	}
-	*/
 }
 
 
