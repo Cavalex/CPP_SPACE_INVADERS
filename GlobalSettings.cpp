@@ -43,7 +43,10 @@ char playerControls2[4][3] = {{VK_UP, VK_LEFT, VK_RIGHT},
 							{'W', 'A', 'D'}, // W, A, D
 							{105, 106, 108}, // I, J, L
 							{116, 102, 104}}; // T, F, H
-							
+					
+//TESTE
+int j = 0;
+		
 // Já que os tiros estavam a dar o problema de recursão é melhor colocá-los aqui
 // na forma de um bool, que depois é atualizado na função updateShots() do Game.
 bool playerShot[4] = {false, false, false, false};

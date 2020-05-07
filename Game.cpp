@@ -34,8 +34,6 @@ void Game::start(){
 		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true);
 		i++;
 		
-		// 20 inimigos 
-		
 		/*
 		enemies1[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit, 0, 0, 'X', 10, 0, true);
 		enemies2[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + enemyYDifference, 0, 0, 'X', 10, 0, true);
@@ -43,43 +41,11 @@ void Game::start(){
 		i++;
 		*/
 		
+		/*
 		int size = 9;
 		char draw[9] = {' ', 219, ' ',
 						219, 219, 219,
 						' ', '|', ' '};
-		
-		
-		/*
-		if(i <= numEnemies/2 - 1){
-			// Queremos criar 10 inimigos 3x3, ou seja 90 inimigos
-			for(int z = 0; z < size; z++){
-				enemies[i] = Enemy((4 + (z%(size/3)) + spaceBtEnemies*((i/size))), 4 + size/3, 0, 0, draw[z], 10, 0, true);
-				i++;
-			}
-		}
-		
-		else {
-			// Aqui criamos os outros 10 inimigos, mais 90
-			for(int z = 0; z < size; z++){
-				enemies[i] = Enemy((4 + (z%(size/3)) + spaceBtEnemies*((i/size))), 9 + size/3, 0, 0, draw[z], 10, 0, true);
-				i++;
-			}
-		}
-		*/
-		
-		/*
-		if(i <= numEnemies/2 - 1){
-			// Inimigos 3x3
-			for(int z = 0; z < size; z++){
-				if(z < size/3) enemies[i] = Enemy(4 + spaceBtEnemies*i + ((z % 3) + 1), 5 + size/3, 0, 0, draw[z], 10, 0, true);
-			}
-		}
-		else {
-			// Inimigos 3x3
-			for(int z = 0; z < size; z++){
-				if(z < size/3) enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2) + ((z % 3) + 1), 9 + size/3, 0, 0, draw[z], 10, 0, true);
-			}	
-		}
 		*/
 	}
 	
@@ -139,6 +105,9 @@ void Game::checkCols(){
 					if( ( ((enemies[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
 					&&  ((enemies[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
 					&& (enemies[i].isAlive() && shots[s].isAlive()) ){
+						//TESTE
+						//SetCursorPosition(enemies[i].x, enemies[i].y);
+						//cout << "MOR";
 						// Matá-los e apagá-los
 						shots[s].setLife(false);
 						enemies[i].setLife(false);
@@ -215,10 +184,12 @@ void Game::updatePlayerShots(){
 		if(!(shots[i].isAlive())){
 			for(int n = 0; n < numPlayers; n++){
 				if(playerShot[n] == true && playerShotCD[n] <= 0){
-					shots[i] = Shot(playerShotX[n], playerShotY[n], 0, 0, '|', 1, true, 1);
+					//shots[i] = Shot(playerShotX[n], playerShotY[n], 0, 0, '|', 1, true, 1);
+					shots[i] = Shot(players[n].x, players[n].y, 0, 0, '|', 1, true, 1);
 					playerShot[n] = false;
 					playerShotCD[n] += shotCD;
 				}
+				else playerShot[n] = false;
 			}
 		}
 	//}
@@ -262,11 +233,11 @@ void Game::updateShots(){
 				}
 			}
 			if(canShoot){
-				int r = getRandomNumber(1, shotChance);
-				//int r = 1;
+				//int r = getRandomNumber(1, shotChance);
 				// TESTE
-				SetCursorPosition(0, 1);
-				cout << "r: " << r << " ";
+				int r = 1;
+				//SetCursorPosition(0, 1);
+				//cout << "r: " << r << " ";
 				if(r == 10){
 					// TESTE
 					/*
@@ -284,14 +255,25 @@ void Game::updateShots(){
 			canShoot = true;
 		}
 		
-		for(int i = 0; i < numPlayers; i++) playerShotCD[i] -= 1;
-
+		for(int i = 0; i < numPlayers; i++) if(!(playerShotCD[i]) <= 0) playerShotCD[i] -= 1;
+		
+		//TESTE
+		SetCursorPosition(0, 1);
+		cout << "P1 CD: " << playerShotCD[0] << " ";
+		SetCursorPosition(j, 2);
+		if(playerShot[0]){
+			cout << "Shot!";
+			j += 7;
+		}
+	
+		// Update do movimento dos tiros
 		for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
 				shots[i].move();
 			}
 		}
-
+		
+		// Ver colisões
 		for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
 				shots[i].checkCol();
@@ -301,12 +283,4 @@ void Game::updateShots(){
 		t2.restart();
 	}
 }
-
-
-
-
-
-
-
-
 
