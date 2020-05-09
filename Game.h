@@ -20,6 +20,7 @@
 
 class Game {
 	public:
+		Game();
 		Game(int, int);
 		void updatePlayers();
 		void updateEnemies();
@@ -30,9 +31,14 @@ class Game {
 		void start();
 		void menu();
 		
+		void resetGameStats();
 		void checkCols();
+		void checkGameOver();
+		bool checkPlayersLives();
 		
+		bool gameOver;
 		int numEnemies;
+		int numDeadEnemies;
 		int numPlayers;
 		
 		// Têm que ser públicas para evitar usar gets de arrays que podem complicar muito o código e

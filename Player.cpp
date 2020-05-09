@@ -11,13 +11,14 @@
 
 using namespace std;
 
-Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s, bool aliv, int nu)
+Player::Player(int x, int y, int sAX, int sAY, char ch, string n, int s, bool aliv, int nu, int livess)
 	: Entity (x, y, sAX, sAY, ch)
 {
 	this->name = n;
 	this->score = s;
 	this->alive = aliv;
 	this->num = nu;
+	this->lives = livess;
 }
 
 Player::Player()
@@ -27,6 +28,7 @@ Player::Player()
 	this->score = 0;
 	this->alive = false;
 	this->num = 0;
+	this->lives = 0;
 }
 
 void Player::action(){
@@ -74,3 +76,22 @@ void Player::shoot(){
 	playerShotY[num-1] = y + sizeY;
 }
 
+string Player::getName(){
+	return name;
+}
+
+void Player::gotHit(){
+	lives -= 1;
+	if(lives <= 0){
+		// Matar o jogador
+		alive = false;
+		clearEntity();
+		// Metê-lo fora do ecrã para evitar problemas
+		x = -50;
+		y = -50;
+	}
+}
+
+int Player::getLives(){
+	return lives;
+}

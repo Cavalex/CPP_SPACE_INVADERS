@@ -7,9 +7,10 @@
 #include <unistd.h>
 #include <ctime>
 
+#include "LOGO_cpc.h"
+
 #include "Entity.cpp"
 #include "Enemy.cpp"
-// O Menu ainda não está a dar e não nos precisamos de preocupar com isso agora
 #include "Player.cpp"
 #include "Timer.cpp"
 #include "Game.cpp"
@@ -20,8 +21,10 @@
 using namespace std;
 
 // AGORA O JOGO
+
 int main(){
 	
+	// o gerador de números aleatórios
 	srand(time(NULL));
 
 	// Mudar o tamanho da consola
@@ -29,10 +32,22 @@ int main(){
 	
 	// Só para "limpar" o fundo, relativamete inútil
 	ClearScreen(bgChar);
-
-	// Criar o jogo com 20 inimigos e 1 jogador
-	Game game = Game(20, 1);
-	game.start();
+	Game game;
+	
+	int option = menu();
+	switch(option){
+		case 1:
+			// Criar o jogo com 20 inimigos e 1 jogador
+			game = Game(20, 1);
+			game.start();
+			break;
+		case 2:
+			// load game:
+			cout << "OPÇAO 2";
+			break;
+		default:
+			break;
+	}
 	
 	// Pausar consola até o user premir o Enter
 	cin.get();

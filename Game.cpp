@@ -16,19 +16,31 @@ using namespace std;
 // O timer para o clock (o movimento dos inimigos)
 Timer t;
 Timer t2;
+Timer scoreT;
 
 Game::Game(int n, int p){
 	this->numEnemies = n;
 	this->numPlayers = p;
+	this->numDeadEnemies = 0;
+	this->gameOver = false;
+}
+
+Game::Game(){
+	this->numEnemies = 20;
+	this->numPlayers = 1;
+	this->numDeadEnemies = 0;
+	this->gameOver = false;
 }
 
 void Game::start(){
 	
-	//menu();
+	scoreT;
 	
 	// preencher enemies[]
 	int i = 0;
 	while (i < numEnemies){
+		
+		gameState = 1;
 		
 		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true);
 		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true);
@@ -51,7 +63,7 @@ void Game::start(){
 	
 	// preencher players[]
 	for(int i = 1; i <= numPlayers; i++){
-		players[i-1] = Player(WIDTH / 2, HEIGHT - 2 - 2 * i, 1, 0, 'O', playersN[i], 0, true, i);
+		players[i-1] = Player(WIDTH / 2, HEIGHT - 2 - 2 * i, 1, 0, 'O', playersN[i-1], 0, true, i, playerLives);
 		players[i-1].drawEntity(); // Só para não ficarem invisiveis no início
 	}
 	
@@ -67,7 +79,7 @@ void Game::start(){
 	}
 	
 	// game loop
-	while(true){
+	while(!gameOver){
     	
     	updatePlayerShots();
     	updateEnemyShots();
@@ -76,8 +88,9 @@ void Game::start(){
     	updatePlayers();
     	updateBarriers();
     	checkCols();
+    	checkGameOver();
     	
-    	// TESTE
+		// TESTE
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
@@ -86,18 +99,76 @@ void Game::start(){
 		}
 		SetCursorPosition(0, 0);
 		cout << "Alive Shots: " << a << " ";
-		cout << "|| Can Enemy Shoot?: " << canShoot;
-		if(!canShoot){ cout << " || UPDATED";}
-		else{ cout << " ";}
+		cout << "|| Can Enemy Shoot?: " << canShoot << " ";
+		cout << "|| Lives: " << players[0].getLives() << " ";
+		cout << "|| Clock: " << scoreT.getTimePassed() << " ";
 		
-		// O usleep() estava a causar erros no movimento, decidimos usar o sleep() portanto
+		// UI
+		SetCursorPosition(6, 1);
+		cout << "Name: " << players[0].getName() << " ";
+		
+		SetCursorPosition(WIDTH - 16, 1);
+		cout << "Time: " << scoreT.getTimePassed() << " ";
+		
+		// O usleep() estava a causar erros no movimento, portanto decidimos usar o sleep()
 		sleep(0.01);
     }
+    
+    // Quando o jogo acabar:
+    // Se todos os jogadores estão mortos:
+    if(!checkPlayersLives()){
+    	//TESTE
+		SetCursorPosition(WIDTH/2, HEIGHT/2);
+    	cout << "PERDESTE";
+    	resetGameStats();
+    	// Se perder, recomeçar o jogo
+    	gameState = 0;
+		// Reiniciar Score
+		score = 0;
+    	// Repetir jogo (todo)
+	}
+	else{ // Se acabou o jogo, mas há jogadores vivos:
+		//TESTE
+		SetCursorPosition(WIDTH/2, HEIGHT/2);
+		cout << "GANHASTE";
+		gameState += 1;
+		resetGameStats();
+		// Score aumenta com o tempo
+		// Tabela de score
+		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
+	}
+}
+
+void Game::resetGameStats(){
+	enemyVelocity = initialEnemyVelocity;
+	shotVelocity = initialShotVelocity;
+}
+
+void Game::checkGameOver(){	
+	if(numDeadEnemies >= numEnemies) gameOver = true;
+	checkPlayersLives();
+}
+
+bool Game::checkPlayersLives(){
+	bool allDead = true;
+	for(int i = 0; i < numPlayers; i++){
+		if(!(players[i].isAlive())) allDead = true;
+		else{
+			allDead = false;
+			break;
+		}
+	}
+	if(allDead){
+		gameOver = true;
+		return false;
+	}
+	return true;
 }
 
 void Game::checkCols(){
+	// Colisões Balas-Inimigos;
 	for(int i = 0; i < numEnemies; i++){
-		for(int s = 0; s < 100; s++){
+		for(int s = 0; s < numTotalShots/2; s++){ // /2 para não ter de calcular tantos tiros
 			// Estes dois fors são para dar loop a cada "bloco" do inimigo
 			for(int ye = -enemies[i].getSizeY(); ye <= enemies[i].getSizeY(); ye++){
 				for(int xe = -enemies[i].getSizeX(); xe <= enemies[i].getSizeX(); xe++){
@@ -113,6 +184,31 @@ void Game::checkCols(){
 						enemies[i].setLife(false);
 						shots[s].clearEntity();
 						enemies[i].clearEntity();
+						numDeadEnemies += 1;
+					}
+				}
+			}
+		}
+	}
+	
+	// Colisões Jogador-Barras
+	for(int i = 0; i < numPlayers; i++){
+		for(int s = 0; s < numTotalShots/2; s++){
+			// Estes dois fors são para dar loop a cada "bloco" do inimigo
+			for(int ye = -players[i].getSizeY(); ye <= players[i].getSizeY(); ye++){
+				for(int xe = -players[i].getSizeX(); xe <= players[i].getSizeX(); xe++){
+					// Colisõessssssss
+					if( ( ((players[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
+					&&  ((players[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
+					&& (players[i].isAlive() && shots[s].isAlive()) ){
+						//TESTE
+						//SetCursorPosition(enemies[i].x, enemies[i].y);
+						//cout << "MOR";
+						// Matá-los e apagá-los
+						shots[s].setLife(false);
+						players[i].gotHit();
+						shots[s].clearEntity();
+						players[i].drawEntity();
 					}
 				}
 			}
@@ -164,6 +260,24 @@ void Game::updateEnemies(){
 		t.restart();
 		checkCols();
 	}
+	
+	// Aumento da Velocidade
+	if(numDeadEnemies == numEnemies - (numEnemies / 2) && velBonus == 1){
+		enemyVelocity += 5;
+		velBonus += 1;
+	}
+	if(numDeadEnemies == numEnemies - (numEnemies / 4) && velBonus == 2){
+		enemyVelocity += 5;
+		velBonus += 1;
+	}
+	if(numDeadEnemies == numEnemies - (numEnemies / 10) && velBonus == 3){
+		enemyVelocity += 10;
+		velBonus += 1;
+	}
+	if(numDeadEnemies == numEnemies - 1 && velBonus == 4){
+		enemyVelocity += 30;
+		velBonus += 1;
+	}
 }
 
 void Game::updateBarriers(){
@@ -185,7 +299,7 @@ void Game::updatePlayerShots(){
 			for(int n = 0; n < numPlayers; n++){
 				if(playerShot[n] == true && playerShotCD[n] <= 0){
 					//shots[i] = Shot(playerShotX[n], playerShotY[n], 0, 0, '|', 1, true, 1);
-					shots[i] = Shot(players[n].x, players[n].y, 0, 0, '|', 1, true, 1);
+					shots[i] = Shot(players[n].x, players[n].y - 1, 0, 0, '|', 1, true, 1);
 					playerShot[n] = false;
 					playerShotCD[n] += shotCD;
 				}
@@ -233,9 +347,9 @@ void Game::updateShots(){
 				}
 			}
 			if(canShoot){
-				//int r = getRandomNumber(1, shotChance);
+				int r = getRandomNumber(1, shotChance);
 				// TESTE
-				int r = 1;
+				//int r = 1;
 				//SetCursorPosition(0, 1);
 				//cout << "r: " << r << " ";
 				if(r == 10){

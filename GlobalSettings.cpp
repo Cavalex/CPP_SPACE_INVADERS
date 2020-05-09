@@ -46,7 +46,10 @@ char playerControls2[4][3] = {{VK_UP, VK_LEFT, VK_RIGHT},
 					
 //TESTE
 int j = 0;
-		
+
+int gameState = 0;
+int score = 0;
+
 // Já que os tiros estavam a dar o problema de recursão é melhor colocá-los aqui
 // na forma de um bool, que depois é atualizado na função updateShots() do Game.
 bool playerShot[4] = {false, false, false, false};
@@ -54,18 +57,10 @@ int playerShotX[4] = {-1, -1, -1, -1}; // A posição onde é para colocar os tiros
 int playerShotY[4] = {-1, -1, -1, -1}; // A posição onde é para colocar os tiros
 int playerShotCD[4] = {0, 0, 0, 0}; // O cooldown dos tiros para evitar que os jogadores os spamem
 int shotCD = 6; // Para evitar que o jogador spame tiros
-
-bool ignore5 = false;
-bool continue5 = false;
-bool ignore4 = false;
-bool continue4 = false;
-bool ignore3 = false;
-bool continue3 = false;
-bool ignore2 = false;
-bool continue2 = false;
+int playerLives = 3; // As vidas do jogador
 
 bool canShoot = true; // variável para sabermos se um inimigo pode ou não disparar
-int shotChance = 30; // > dispara menos vezes; < dispara mais vezes
+int shotChance = 20; // > dispara menos vezes; < dispara mais vezes
 int enemyYInit = 5; // X inicial dos inimigos da primeira linha
 int enemyYDifference = 4; // A diferença entre os X's dos inimigos da primeira linha para a segunda
 int barrierCharInt = 219; // O caráter das barreiras em int
@@ -74,8 +69,11 @@ double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
 int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
 int numBarriers = 8; // numero de barreiras no jogo
 
-double shotVelocity = 10; // A velocidade dos tiros
-double enemyVelocity = 5; // A velocidade dos inimigos, 5 é o ideal, 10 é rápido e 2 lento
+double initialShotVelocity = 10;
+double shotVelocity = initialShotVelocity; // A velocidade dos tiros
+double initialEnemyVelocity = 5;
+double velBonus = 1;
+double enemyVelocity = initialEnemyVelocity; // A velocidade dos inimigos, 5 é o ideal, 10 é rápido e 2 lento
 int way = 1; // sentido de movimento dos inimigos; -1 esquerda , 1 direita
 
 string playersN[4] = {"Cavalex", "Joao", "Marco" ,"Matheus"};
