@@ -20,10 +20,10 @@ class Carr_Guar
 		int GetMemoria_de_jogo();
 		string GetNome_do_jogador();
 		// Sets:
-		string SetNome_do_jogador(char);
+		void SetNome_do_jogador(string);
 		void SetMemoria_de_jogo(int);
 		void SetFicheiro(int);
-		
+		string Nome();
 		void Carregar_jogo(int);// carrega o jogo.
 		
 		

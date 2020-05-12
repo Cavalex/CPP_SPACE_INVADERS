@@ -35,7 +35,7 @@ int Carr_Guar::GetFicheiro(){
 	return this->Ficheiro; 
 }
 //Sets
-string Carr_Guar::SetNome_do_jogador(char nome){
+void Carr_Guar::SetNome_do_jogador(string nome){
 	this-> nome_do_jogador= nome;
 }
 
@@ -210,36 +210,35 @@ void Carr_Guar::SetFicheiro(int fich){
 // GUARDAR O JOGO:
 void Carr_Guar::Guardar_jogo(int opcao, int estado, string nome){
 
-	this->nome_do_jogador=nome;//reforço de igualdade.
-	this->memoria_de_jogo=estado;
 	
 	if(opcao==1){// caso , o jogo esteja carregado no ficheiro 1, entrar aqui:
 		ofstream guardar1 ("guardar jogo 1.txt");// Abre o ficheiro para escrita.
-		guardar1 << this->nome_do_jogador << " " << this->memoria_de_jogo; 
+		guardar1 << nome << " " << estado; 
 		guardar1.close();// fecha o ficheiro.
 	}
 		
 	else if(opcao==2){// caso , o jogo esteja carregado no ficheiro 2, entrar aqui:
 		ofstream guardar2 ("guardar jogo 2.txt");// Abre o ficheiro para escrita.
-		guardar2 << this->nome_do_jogador << " " << this->memoria_de_jogo; 
+		guardar2 << nome << " " << estado; 
 		guardar2.close();// fecha o ficheiro.
 	}
 		
 	else if(opcao==3){// caso , o jogo esteja carregado no ficheiro 3, entrar aqui:
 		ofstream guardar3 ("guardar jogo 3.txt");// Abre o ficheiro para escrita.
-		guardar3 << this->nome_do_jogador << " " << this->memoria_de_jogo; 
+		guardar3 << nome << " " << estado; 
 		guardar3.close();// fecha o ficheiro.
 	}
 }
 // CARREGAR JOGO:
 void Carr_Guar::Carregar_jogo(int opcao){
-		this->Ficheiro=opcao;// guarda a identificação do ficheiro.
+		string nome; 
+		int estado;
 		if(opcao==1){// caso a Opção do player seja o ficheiro 1, fazer:
 		ifstream guardar1 ("guardar jogo 1.txt");
 		if(guardar1== NULL){// caso não abra:
 			this-> memoria_de_jogo=404;
 		}else{
-			guardar1 >> this->nome_do_jogador >> this->memoria_de_jogo; 	
+			guardar1 >> nome >> estado; 	
 		} 
 		guardar1.close();//fecha ficheiro.
 	}
@@ -249,7 +248,7 @@ void Carr_Guar::Carregar_jogo(int opcao){
 		if(guardar2== NULL){// caso não abra:
 			this-> memoria_de_jogo=404;
 		}else{
-			guardar2 >> this->nome_do_jogador >> this->memoria_de_jogo; 	
+			guardar2 >> nome >>estado; 	
 		}
 		guardar2.close();//fecha ficheiro.
 	}
@@ -259,10 +258,13 @@ void Carr_Guar::Carregar_jogo(int opcao){
 		if(guardar3== NULL){// caso não abra:
 			this-> memoria_de_jogo=404;
 		}else{
-			guardar3 >> this->nome_do_jogador >> this->memoria_de_jogo; 	
+			guardar3 >> nome >> estado; 	
 		} 
 		guardar3.close();//fecha ficheiro.
 	}
+	this->nome_do_jogador = nome;
+	this->Ficheiro = opcao;
+	this->memoria_de_jogo = estado;
 }
 
 // CONTROLO DO PLAYER E DESENHOS VARIAVEIS:
@@ -350,18 +352,10 @@ void Carr_Guar::Print_Menu(){
 }
 
 //função de Novo Jogo:
-int Novo_jogo(Carr_Guar b, int new_g){
-	int ficheiro;
-	int easter_Egg=0;
+string Carr_Guar::Nome(){
 	string nome;
-	b.Menu_Carregar_Guardar_jogo(new_g);
-	b.Print_Menu();
-	ficheiro = b.Menu_Controlo_player();
-	if(ficheiro>0 && ficheiro<=4){
-			if(ficheiro==4){// "BACK"
-				return 0;// Volta para o Menu principal.
-			}
-	}
+	int easter_Egg = 0;
+	
 	int len ;
 	do{
 		char botao;
@@ -390,7 +384,7 @@ int Novo_jogo(Carr_Guar b, int new_g){
 		}
 	}while(len>4);
 	if (easter_Egg ==2){
-		cout<< "\n\n\n\n\t\t YOUR NAMETAG IS: "<< nome;
+		cout<< "\n\n\n\n\t\t YOUR NAME TAG IS: "<< nome;
 		sleep(2);
 		cout<< "\n\n\t\t  AH AH Perfect!" ;
 		sleep(2);
@@ -400,13 +394,7 @@ int Novo_jogo(Carr_Guar b, int new_g){
 	}
 	system("cls");
 
-	b.SetFicheiro(ficheiro);// assume o ficheiro ao slot
-	b.Guardar_jogo(ficheiro, 1, nome);//Guarda o jogo.
-	cout<< "\n\n\n\t\t\t\t\tINTRO";
-	// INTRO
-	// JOGO
-	sleep(4);
-	return 6; //retorna para o nivel 1
+	return nome; //retorna para o nivel 1
 }
 
 
