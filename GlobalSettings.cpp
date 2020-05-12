@@ -63,7 +63,8 @@ int playerLives = 3; // As vidas do jogador
 // Para servir de referência, este valor não muda o tamanho das barreiras mas 
 // não quero colocar nas colisões barreiras-balas um "9" que pode parecer aleatório
 int barrierAverageSize = 9; 
-bool ignoreCollision = false;
+int numBarriers = 9; // numero de barreiras no jogo
+int barrierMaxHeight = HEIGHT - 8; // altura das barreiras relativamente ao chão
 
 bool canShoot = true; // variável para sabermos se um inimigo pode ou não disparar
 int initialShotChance = 20;
@@ -74,7 +75,6 @@ int barrierCharInt = 219; // O caráter das barreiras em int
 bool allDrop = false; // variáel para fazer descer os inimigos em sintonia
 double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
 int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
-int numBarriers = 8; // numero de barreiras no jogo
 
 double initialShotVelocity = 10;
 double shotVelocity = initialShotVelocity; // A velocidade dos tiros

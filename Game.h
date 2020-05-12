@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <unistd.h>
 #include <ctime>
+#include <vector>
 
 #include "GlobalSettings.cpp"
 
@@ -36,6 +37,7 @@ class Game {
 		void checkGameOver();
 		bool checkPlayersLives();
 		
+		bool playerLost;
 		bool gameOver;
 		int numEnemies;
 		int numDeadEnemies;
@@ -48,7 +50,7 @@ class Game {
 		Player players[4];
 		//Shot shots[numShotsPP * numPlayers];
 		Shot shots[400];
-		Barrier barriers[100];
+		vector<Barrier> barriers;
 		
 	// não funcionam com protected, públicas it is
 	/*

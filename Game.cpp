@@ -24,6 +24,7 @@ Game::Game(int n, int p){
 	this->numPlayers = p;
 	this->numDeadEnemies = 0;
 	this->gameOver = false;
+	this->playerLost = false;
 }
 
 Game::Game(){
@@ -31,6 +32,7 @@ Game::Game(){
 	this->numPlayers = 1;
 	this->numDeadEnemies = 0;
 	this->gameOver = false;
+	this->playerLost = false;
 }
 
 void Game::start(){
@@ -68,11 +70,24 @@ void Game::start(){
 		players[i-1].drawEntity(); // Só para não ficarem invisiveis no início
 	}
 	
-	// preencher barriers[]
+	// preencher vetor barriers
 	for(int i = 0; i < numBarriers; i++){
-		barriers[i] = Barrier(5 + 9*i, HEIGHT - 8, 1, 1, (char)barrierCharInt, true);
+		for(int z2 = 0; z2 < 3; z2++){
+			for(int z = 0; z < 3; z++){
+				barriers.push_back(Barrier(6 + z + (9*i), barrierMaxHeight + z2, 0, 0, (char)barrierCharInt, true));
+			}
+		}
+		
+		// Barreiras antigas
+		/*
+		barriers[i] = Barrier(6 + 9*i, HEIGHT - 8, 1, 1, (char)barrierCharInt, true);
 		barriers[i].drawEntity(); // Só para não ficarem invisiveis no início
+		*/
 	}
+	
+	// desenhar barriers
+	for(int i = 0; i < barriers.size(); i++) barriers[i].drawEntity();
+
 	
 	// preencher shots[]
 	for(int i = 0; i < numTotalShots; i++){
@@ -103,8 +118,6 @@ void Game::start(){
 		cout << "Alive Shots: " << a << " ";
 		cout << "|| Can Enemy Shoot?: " << canShoot << " ";
 		cout << "|| Lives: " << players[0].getLives() << " ";
-		cout << "|| Clock: " << scoreT.getTimePassed() << " ";
-		//
 		
 		// O usleep() estava a causar erros no movimento, portanto decidimos usar o sleep()
 		sleep(0.01);
@@ -112,7 +125,7 @@ void Game::start(){
     
     // Quando o jogo acabar:
     // Se todos os jogadores estão mortos:
-    if(!checkPlayersLives()){
+    if(!checkPlayersLives() || playerLost){
     	//TESTE
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
     	cout << "PERDESTE";
@@ -167,6 +180,7 @@ bool Game::checkPlayersLives(){
 	}
 	if(allDead){
 		gameOver = true;
+		playerLost = true;
 		return false;
 	}
 	return true;
@@ -223,40 +237,25 @@ void Game::checkCols(){
 		}
 	}
 	
+	// (numBarriers * barrierAverageSize)
 	// Colisões Barreiras-Balas;
-	for(int i = 0; i < (numBarriers * barrierAverageSize) ; i++){
-		for(int s = 0; s < numTotalShots; s++){
-			ignoreCollision = false;
-			// Estes dois fors são para dar loop a cada "bloco" da barreira
+	for(int i = 0; i < (numBarriers * barrierAverageSize); i++){
+		for(int s = 0; s < numTotalShots; s++){ // /2 para não ter de calcular tantos tiros
+			// Estes dois fors são para dar loop a cada "bloco" do inimigo
 			for(int ye = -barriers[i].getSizeY(); ye <= barriers[i].getSizeY(); ye++){
 				for(int xe = -barriers[i].getSizeX(); xe <= barriers[i].getSizeX(); xe++){
-					for(int xV = 0; xV <= barriers[i].deadSquaresX.size(); xV++){
-						for(int xV2 = 0; xV2 <= barriers[i].deadSquaresX.size(); xV2++){
-							if((barriers[i].deadSquaresX[xV2] == shots[i].getX())
-							&& (barriers[i].deadSquaresY[xV2] == shots[i].getY())){
-								ignoreCollision = true;
-							}
-						}
-						if (find(barriers[i].deadSquaresX.begin(), barriers[i].deadSquaresX.end(), shots[i].getX()) != barriers[i].deadSquaresX.end()){
-							if (find(barriers[i].deadSquaresY.begin(), barriers[i].deadSquaresY.end(), shots[i].getY()) != barriers[i].deadSquaresY.end()){
-								ignoreCollision = true;
-							}
-						}
-						if(!ignoreCollision){
-							// Colisõessssssss
-							if( ( ((barriers[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
-							&&  ((barriers[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
-							&& (barriers[i].isAlive() && shots[s].isAlive())
-							&& !((barriers[i].deadSquaresX[xV] == shots[i].getX())
-							&& (barriers[i].deadSquaresY[xV] == shots[i].getY()))){
-								shots[s].setLife(false);
-								barriers[i].setSize(barriers[i].getSize() - 1);
-								shots[s].clearEntity();
-								barriers[i].deadSquaresX.push_back(shots[s].getX());
-								barriers[i].deadSquaresY.push_back(shots[s].getX());
-								if(barriers[i].getSize() == 0) barriers[i].setLife(false);
-							}
-						}
+					// Colisõessssssss
+					if( ( ((barriers[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
+					&&  ((barriers[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
+					&& (barriers[i].isAlive() && shots[s].isAlive()) ){
+						//TESTE
+						//SetCursorPosition(enemies[i].x, enemies[i].y);
+						//cout << "MOR";
+						// Matá-los e apagá-los
+						shots[s].setLife(false);
+						barriers[i].setLife(false);
+						shots[s].clearEntity();
+						barriers[i].clearEntity();
 					}
 				}
 			}
@@ -266,13 +265,36 @@ void Game::checkCols(){
 	// Colisões Balas-Balas
 	for(int i = 0; i < numTotalShots; i++){
 		for(int s = 0; s < numTotalShots; s++){
-			if((shots[i].getX() == shots[s].getX()) && 
-			(shots[i].getY() == shots[s].getY()) && 
-			shots[i].isAlive() && 
+			if((shots[i].getX() == shots[s].getX()) &&
+			(shots[i].getY() == shots[s].getY()) &&
+			shots[i].isAlive() &&
 			shots[s].isAlive() && s != i){
 				shots[i].setLife(false);
 				shots[s].setLife(false);
 				shots[i].clearEntity();
+			}
+		}
+	}
+	
+	// Colisões Inimigos-Barreiras
+	for(int i = 0; i < numEnemies; i++){
+		for(int s = 0; s < barriers.size(); s++){ // /2 para não ter de calcular tantos tiros
+			// Estes dois fors são para dar loop a cada "bloco" do inimigo
+			for(int ye = -enemies[i].getSizeY(); ye <= enemies[i].getSizeY(); ye++){
+				for(int xe = -enemies[i].getSizeX(); xe <= enemies[i].getSizeX(); xe++){
+					// Colisõessssssss
+					if( ( ((enemies[i].getX() + xe) == (barriers[s].getX() + barriers[s].getSizeX() ))
+					&&  ((enemies[i].getY() + ye) == (barriers[s].getY() + barriers[s].getSizeY() )) )
+					&& (enemies[i].isAlive() && barriers[s].isAlive()) ){
+						// Se colidirem o jogo acaba:
+						gameOver = true;
+						playerLost = true;
+						barriers[s].setLife(false);
+						enemies[i].setLife(false);
+						barriers[s].clearEntity();
+						enemies[i].clearEntity();
+					}
+				}
 			}
 		}
 	}

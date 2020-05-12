@@ -28,7 +28,7 @@ void gotoxy(int x, int y) //função para mudar a posiçao do cursor que recebe doi
 void logo(void)//função para desenhar logotipo inicial
 {
 	int x,y;
-	int linhasl=0;//variaveis para centrar
+	int linhasl=0,a,b;//variaveis para centrar
 	int desenho[20][55]={
 	0,0,0,0,0,0,0,0,0,0,0,0,178,178,178,178,0,0,64,64,64,64,64,0,0,0,0,178,178,0,0,0,0,178,178,178,0,0,0,0,0,178,178,0,0,0,0,0,0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,0,0,178,0,0,0,0,178,0,64,0,0,0,0,64,0,0,47,0,0,92,0,0,178,0,0,0,178,0,0,0,47,178,178,92,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -51,10 +51,12 @@ void logo(void)//função para desenhar logotipo inicial
 	0,157,157,157,157,157,157,0,124,124,0,0,124,124,0,0,0,92,0,47,0,0,0,88,0,0,0,0,88,0,178,178,178,178,178,0,0,178,178,178,0,0,178,0,169,0,0,169,0,178,178,178,178,178,47,
 	0,0,0,0,0,0,0,0,238,238,0,0,238,238,0,0,0,0,118,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };//matriz com caracteres do desenho do mapa usando a tabela ASCII
+	a=(WIDTH-54)/2;
+	b=(HEIGHT-20)/2;
 	for(x=0;x<20;x++)//desenhar a matriz no ecrã
-	{
+	{	
+		gotoxy(a,b+linhasl);
 		linhasl++;
-		gotoxy(cx,linhasl+cy);
 		for(y=0;y<54;y++)
 		{
 		    cout<<(char)desenho[x][y];	
@@ -68,8 +70,8 @@ int menu(void)//retorna o numero da opção
 {
 	system("cls");//limpar ecrã
 	int linhasr=0,linhasret=0;//centrar
-	char m[TAMANHO_X][67]={0};//matriz nula
-	char r[TAMANHO_X-2][20]={
+	char m[21][67]={0};//matriz nula
+	char r[19][20]={
 	0,0,0,0,0,0,0,0,0,178,178,178,178,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,178,0,0,0,0,178,0,0,0,0,0,0,
 	178,178,178,0,0,0,0,178,0,0,0,0,0,0,178,0,0,0,0,0,
@@ -96,6 +98,8 @@ int menu(void)//retorna o numero da opção
 	string c="-Credits";
 	string e="-Exit";
 	char a[3]={195,205,206};//desenhar o selecionador
+	cx=(WIDTH-66)/2;
+	cy=(HEIGHT-20)/2;
 	for(int x=0;x<21;x++)//desenho dos extremos do retângulo no ecrã
 	{
 		linhasret++;
@@ -146,7 +150,7 @@ int menu(void)//retorna o numero da opção
 	cout<<e;//escrever no ecrã a opção "Exit"
 	gotoxy(5+cx,8+cy);
 	cout<<a;//desenha o cursor que se vai mover entre posições
-	gotoxy(80+cx,22+cy);//tirar para fora do menu
+	gotoxy(0,0);//tirar para fora do menu
 	int x1=5,y1=8;//posição inicial do cursor
 	x1+=cx;
 	y1+=cy;
@@ -167,14 +171,14 @@ int menu(void)//retorna o numero da opção
 				{
 				    gotoxy(x1,y1);
 				    cout<<a;
-				    gotoxy(80+cx,22+cy);
+				    gotoxy(0,0);
 				}
 				else//se chegar ao fim das opções volta ao inicio das opções
 				{
 					y1=8+cy;
 					gotoxy(x1,y1);
 					cout<<a;
-					gotoxy(80+cx,22+cy);
+					gotoxy(0,0);
 				}
 				break;
 			case KEY_UP://seta para cima
@@ -185,14 +189,14 @@ int menu(void)//retorna o numero da opção
 				{
 				    gotoxy(x1,y1);
 				    cout<<a;
-				    gotoxy(80+cx,22+cy);
+				    gotoxy(0,0);
 				}
 				else//se chegar ao inicio das opções volta ao fim das opções
 				{
 					y1=16+cy;
 					gotoxy(x1,y1);
 					cout<<a;
-					gotoxy(80+cx,22+cy);
+					gotoxy(0,0);
 				}
 				break;
 			case ENTER://dependendo da seleção selecionada retorna um número

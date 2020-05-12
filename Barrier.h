@@ -19,9 +19,6 @@ class Barrier : public Entity {
 		void setSize(int);
 		int getSize();
 		
-		vector<int>  deadSquaresX;
-		vector<int>  deadSquaresY;
-		
 	private: 
 		bool alive;
 		int size;

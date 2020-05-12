@@ -16,9 +16,8 @@ Barrier::Barrier(int x, int y, int sAX, int sAY, char ch, bool aliv)
 	: Entity (x, y, sAX, sAY, ch)
 {
 	this->alive = aliv;
-	this->size = (sAX * 2 + 1) + (sAY + 2 + 1);
-	deadSquaresX.push_back(-1);
-	deadSquaresY.push_back(-1);
+	//this->size = (sAX * 2 + 1) + (sAY + 2 + 1);
+	this->size = 1;
 }
 
 Barrier::Barrier()
@@ -26,8 +25,6 @@ Barrier::Barrier()
 {
 	this->alive = false;
 	this->size = 0;
-	deadSquaresX.push_back(-1);
-	deadSquaresY.push_back(-1);
 }
 
 bool Barrier::isAlive(){ return alive; }
@@ -38,9 +35,9 @@ int Barrier::getSize(){ return size; }
 
 void Barrier::setSize(int s){ 
 	size = s;
-	if(size <= 0){
-		alive = false;
-	}
+	//if(size <= 0){
+	//	alive = false;
+	//}
 }
 
 

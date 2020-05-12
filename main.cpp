@@ -35,6 +35,9 @@ int main(){
 	ClearScreen(bgChar);
 	Game game;
 	
+	// O logo do jogo
+	logo();
+	
 	// O menu
 	int option = menu();
 	switch(option){
