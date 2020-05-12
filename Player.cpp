@@ -39,7 +39,6 @@ void Player::action(){
 	    // movimento
 	    if (value != 0){
 	    	
-	    	/*
     		// Se disparar vai colocar a variável do disparo como verdadeira
 	        if(value == playerControls[num-1][0])
 	        	shoot();
@@ -49,20 +48,20 @@ void Player::action(){
 			// movimento para a direita
 	        if(value == playerControls[num-1][2])
 	            moveTo(x + 1, y);
-	        */
 	        
-			if(GetKeyState(playerControls2[num-1][0]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
-			{
-			    shoot();
-			}
-	        if(GetKeyState(playerControls2[num-1][1]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
-			{
-			    moveTo(x - 1, y);
-			}
-			if(GetKeyState(playerControls2[num-1][2]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
-			{
-			    moveTo(x + 1, y);
-			}
+			//if(GetKeyState(playerControls2[num-1][0]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
+			//{
+			//    shoot();
+			//}
+	        //if(GetKeyState(playerControls2[num-1][1]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
+			//{
+			//    moveTo(x - 1, y);
+			//}
+			//if(GetKeyState(playerControls2[num-1][2]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
+			//{
+			//    moveTo(x + 1, y);
+			//}
+			
 		}
 	}
 }

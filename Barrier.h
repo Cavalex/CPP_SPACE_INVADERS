@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
+#include <vector>
 
 #include "GlobalSettings.cpp"
 
@@ -13,10 +14,17 @@ class Barrier : public Entity {
 	public:
 		Barrier(int, int, int, int, char, bool);
 		Barrier();
-		void checkCol();
+		bool isAlive();
+		void setLife(bool);
+		void setSize(int);
+		int getSize();
+		
+		vector<int>  deadSquaresX;
+		vector<int>  deadSquaresY;
 		
 	private: 
 		bool alive;
+		int size;
 		
 };
 

@@ -8,6 +8,7 @@
 #include <conio.h>
 #include <time.h>
 #include <locale.h>
+#include <vector>
 
 // Variável para evitar incluir o ficheiro várias vezes
 #ifndef GLOBAL_CPP
@@ -32,7 +33,7 @@ using namespace std;
 // vamos ignorar esta primeira variável pq acrescentamos um cooldown nos tiros,
 // ter um limite de tiros é inútil
 int numShotsPP = 5; // numero de tiros por jogador
-int numTotalShots = 400;
+int numTotalShots = 200;
 
 char playerControls[4][3] = {{72, 75, 77},
 							{119, 97, 100}, // W, A, D
@@ -59,8 +60,14 @@ int playerShotCD[4] = {0, 0, 0, 0}; // O cooldown dos tiros para evitar que os j
 int shotCD = 6; // Para evitar que o jogador spame tiros
 int playerLives = 3; // As vidas do jogador
 
+// Para servir de referência, este valor não muda o tamanho das barreiras mas 
+// não quero colocar nas colisões barreiras-balas um "9" que pode parecer aleatório
+int barrierAverageSize = 9; 
+bool ignoreCollision = false;
+
 bool canShoot = true; // variável para sabermos se um inimigo pode ou não disparar
-int shotChance = 20; // > dispara menos vezes; < dispara mais vezes
+int initialShotChance = 20;
+int shotChance = initialShotChance; // > dispara menos vezes; < dispara mais vezes
 int enemyYInit = 5; // X inicial dos inimigos da primeira linha
 int enemyYDifference = 4; // A diferença entre os X's dos inimigos da primeira linha para a segunda
 int barrierCharInt = 219; // O caráter das barreiras em int

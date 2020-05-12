@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
+#include <algorithm>
 
 #include "GlobalSettings.cpp"
 #include "Game.h"
@@ -81,15 +82,16 @@ void Game::start(){
 	// game loop
 	while(!gameOver){
     	
-    	updatePlayerShots();
-    	updateEnemyShots();
-    	updateShots();
-    	updateEnemies();
-    	updatePlayers();
-    	updateBarriers();
-    	checkCols();
-    	checkGameOver();
+    	if(!gameOver) updatePlayerShots();
+    	if(!gameOver) updateEnemyShots();
+    	if(!gameOver) updateShots();
+    	if(!gameOver) updateEnemies();
+    	if(!gameOver) updatePlayers();
+    	if(!gameOver) checkCols();
+    	if(!gameOver) checkGameOver();
+    	if(!gameOver) updateUI();
     	
+    	//
 		// TESTE
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
@@ -102,13 +104,7 @@ void Game::start(){
 		cout << "|| Can Enemy Shoot?: " << canShoot << " ";
 		cout << "|| Lives: " << players[0].getLives() << " ";
 		cout << "|| Clock: " << scoreT.getTimePassed() << " ";
-		
-		// UI
-		SetCursorPosition(6, 1);
-		cout << "Name: " << players[0].getName() << " ";
-		
-		SetCursorPosition(WIDTH - 16, 1);
-		cout << "Time: " << scoreT.getTimePassed() << " ";
+		//
 		
 		// O usleep() estava a causar erros no movimento, portanto decidimos usar o sleep()
 		sleep(0.01);
@@ -118,9 +114,10 @@ void Game::start(){
     // Se todos os jogadores estão mortos:
     if(!checkPlayersLives()){
     	//TESTE
-		SetCursorPosition(WIDTH/2, HEIGHT/2);
+		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
     	cout << "PERDESTE";
-    	resetGameStats();
+    	resetVelocities();
+    	shotChance = initialShotChance;
     	// Se perder, recomeçar o jogo
     	gameState = 0;
 		// Reiniciar Score
@@ -129,22 +126,32 @@ void Game::start(){
 	}
 	else{ // Se acabou o jogo, mas há jogadores vivos:
 		//TESTE
-		SetCursorPosition(WIDTH/2, HEIGHT/2);
+		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
 		cout << "GANHASTE";
 		gameState += 1;
-		resetGameStats();
+		resetVelocities();
+		shotChance = initialShotChance;
 		// Score aumenta com o tempo
 		// Tabela de score
 		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
 	}
 }
 
-void Game::resetGameStats(){
+void Game::updateUI(){
+	// UI
+	SetCursorPosition(6, 1);
+	cout << "Name: " << players[0].getName() << " ";
+	
+	SetCursorPosition(WIDTH - 16, 1);
+	cout << "Time: " << scoreT.getTimePassed() << " ";
+}
+
+void Game::resetVelocities(){
 	enemyVelocity = initialEnemyVelocity;
 	shotVelocity = initialShotVelocity;
 }
 
-void Game::checkGameOver(){	
+void Game::checkGameOver(){
 	if(numDeadEnemies >= numEnemies) gameOver = true;
 	checkPlayersLives();
 }
@@ -166,9 +173,10 @@ bool Game::checkPlayersLives(){
 }
 
 void Game::checkCols(){
-	// Colisões Balas-Inimigos;
+	
+	// Colisões Inimigos-Balas
 	for(int i = 0; i < numEnemies; i++){
-		for(int s = 0; s < numTotalShots/2; s++){ // /2 para não ter de calcular tantos tiros
+		for(int s = 0; s < numTotalShots; s++){ // /2 para não ter de calcular tantos tiros
 			// Estes dois fors são para dar loop a cada "bloco" do inimigo
 			for(int ye = -enemies[i].getSizeY(); ye <= enemies[i].getSizeY(); ye++){
 				for(int xe = -enemies[i].getSizeX(); xe <= enemies[i].getSizeX(); xe++){
@@ -191,10 +199,10 @@ void Game::checkCols(){
 		}
 	}
 	
-	// Colisões Jogador-Barras
+	// Colisões Jogador-Balas
 	for(int i = 0; i < numPlayers; i++){
-		for(int s = 0; s < numTotalShots/2; s++){
-			// Estes dois fors são para dar loop a cada "bloco" do inimigo
+		for(int s = 0; s < numTotalShots; s++){
+			// Estes dois fors são para dar loop a cada "bloco" do jogador
 			for(int ye = -players[i].getSizeY(); ye <= players[i].getSizeY(); ye++){
 				for(int xe = -players[i].getSizeX(); xe <= players[i].getSizeX(); xe++){
 					// Colisõessssssss
@@ -211,6 +219,60 @@ void Game::checkCols(){
 						players[i].drawEntity();
 					}
 				}
+			}
+		}
+	}
+	
+	// Colisões Barreiras-Balas;
+	for(int i = 0; i < (numBarriers * barrierAverageSize) ; i++){
+		for(int s = 0; s < numTotalShots; s++){
+			ignoreCollision = false;
+			// Estes dois fors são para dar loop a cada "bloco" da barreira
+			for(int ye = -barriers[i].getSizeY(); ye <= barriers[i].getSizeY(); ye++){
+				for(int xe = -barriers[i].getSizeX(); xe <= barriers[i].getSizeX(); xe++){
+					for(int xV = 0; xV <= barriers[i].deadSquaresX.size(); xV++){
+						for(int xV2 = 0; xV2 <= barriers[i].deadSquaresX.size(); xV2++){
+							if((barriers[i].deadSquaresX[xV2] == shots[i].getX())
+							&& (barriers[i].deadSquaresY[xV2] == shots[i].getY())){
+								ignoreCollision = true;
+							}
+						}
+						if (find(barriers[i].deadSquaresX.begin(), barriers[i].deadSquaresX.end(), shots[i].getX()) != barriers[i].deadSquaresX.end()){
+							if (find(barriers[i].deadSquaresY.begin(), barriers[i].deadSquaresY.end(), shots[i].getY()) != barriers[i].deadSquaresY.end()){
+								ignoreCollision = true;
+							}
+						}
+						if(!ignoreCollision){
+							// Colisõessssssss
+							if( ( ((barriers[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
+							&&  ((barriers[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
+							&& (barriers[i].isAlive() && shots[s].isAlive())
+							&& !((barriers[i].deadSquaresX[xV] == shots[i].getX())
+							&& (barriers[i].deadSquaresY[xV] == shots[i].getY()))){
+								shots[s].setLife(false);
+								barriers[i].setSize(barriers[i].getSize() - 1);
+								shots[s].clearEntity();
+								barriers[i].deadSquaresX.push_back(shots[s].getX());
+								barriers[i].deadSquaresY.push_back(shots[s].getX());
+								if(barriers[i].getSize() == 0) barriers[i].setLife(false);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	// Colisões Balas-Balas
+	for(int i = 0; i < numTotalShots; i++){
+		for(int s = 0; s < numTotalShots; s++){
+			if((shots[i].getX() == shots[s].getX()) && 
+			(shots[i].getY() == shots[s].getY()) && 
+			shots[i].isAlive() && 
+			shots[s].isAlive() && s != i){
+				shots[i].setLife(false);
+				shots[s].setLife(false);
+				shots[i].clearEntity();
 			}
 		}
 	}
@@ -261,7 +323,7 @@ void Game::updateEnemies(){
 		checkCols();
 	}
 	
-	// Aumento da Velocidade
+	// Aumento da velocidade dos inimigos
 	if(numDeadEnemies == numEnemies - (numEnemies / 2) && velBonus == 1){
 		enemyVelocity += 5;
 		velBonus += 1;
@@ -280,12 +342,6 @@ void Game::updateEnemies(){
 	}
 }
 
-void Game::updateBarriers(){
-	for(int i = 0; i < numBarriers; i++){
-		barriers[i].checkCol();
-	}
-}
-
 void Game::updateEnemyShots(){
 	int a = 1;
 }
@@ -294,7 +350,6 @@ void Game::updatePlayerShots(){
 	
 	// Se alguém disparar, criar o tiro no array
 	for(int i = 0; i < numTotalShots; i++){
-	//for(int i = 0; i < numShotsPP * numPlayers; i++){
 		if(!(shots[i].isAlive())){
 			for(int n = 0; n < numPlayers; n++){
 				if(playerShot[n] == true && playerShotCD[n] <= 0){
@@ -306,7 +361,6 @@ void Game::updatePlayerShots(){
 				else playerShot[n] = false;
 			}
 		}
-	//}
 	}
 }
 
@@ -387,7 +441,7 @@ void Game::updateShots(){
 			}
 		}
 		
-		// Ver colisões
+		// Ver colisões com as paredes
 		for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
 				shots[i].checkCol();

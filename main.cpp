@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <unistd.h>
 #include <ctime>
+#include <vector>
 
 #include "LOGO_cpc.h"
 
@@ -24,7 +25,7 @@ using namespace std;
 
 int main(){
 	
-	// o gerador de números aleatórios
+	// O gerador de números aleatórios
 	srand(time(NULL));
 
 	// Mudar o tamanho da consola
@@ -34,6 +35,7 @@ int main(){
 	ClearScreen(bgChar);
 	Game game;
 	
+	// O menu
 	int option = menu();
 	switch(option){
 		case 1:

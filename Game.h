@@ -25,13 +25,13 @@ class Game {
 		void updatePlayers();
 		void updateEnemies();
 		void updateShots();
-		void updateBarriers();
 		void updateEnemyShots();
 		void updatePlayerShots();
+		void updateUI();
 		void start();
 		void menu();
 		
-		void resetGameStats();
+		void resetVelocities();
 		void checkCols();
 		void checkGameOver();
 		bool checkPlayersLives();
