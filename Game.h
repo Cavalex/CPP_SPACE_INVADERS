@@ -10,6 +10,7 @@
 
 #include "GlobalSettings.cpp"
 
+#include "Carr_Guar.h"
 #include "Enemy.h"
 #include "Player.h"
 #include "Shot.h"
@@ -23,6 +24,7 @@ class Game {
 	public:
 		Game();
 		Game(int, int);
+		friend class Carr_Guar;
 		void updatePlayers();
 		void updateEnemies();
 		void updateShots();
@@ -46,7 +48,6 @@ class Game {
 		// Têm que ser públicas para evitar usar gets de arrays que podem complicar muito o código e
 		// não poupam linhas, assim tbm fica mais fácil de ler
 		Enemy enemies[50];
-		
 		Player players[4];
 		//Shot shots[numShotsPP * numPlayers];
 		Shot shots[400];

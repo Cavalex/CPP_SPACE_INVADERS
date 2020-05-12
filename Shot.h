@@ -26,7 +26,7 @@ class Shot : public Entity {
 		// os tiros do jogador e dos inimigos têm movimentos diferentes, 
 		// portanto vamos criar est variável para saber de quem são os tiros
 		// 1 -> jogador (de baixo para cima)
-		// 2 -> inimigo (de cima para baixo)
+		// -1 -> inimigo (de cima para baixo)
 		int type;
 };
 

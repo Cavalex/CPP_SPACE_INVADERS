@@ -8,8 +8,9 @@
 #include <ctime>
 #include <vector>
 
+#include "Carr_Guar.cpp"
+#include "Carr_Guar.h"
 #include "LOGO_cpc.h"
-
 #include "Entity.cpp"
 #include "Enemy.cpp"
 #include "Player.cpp"
@@ -24,6 +25,8 @@ using namespace std;
 // AGORA O JOGO
 
 int main(){
+	
+	bool isGameOn = true;
 	
 	// O gerador de números aleatórios
 	srand(time(NULL));
@@ -40,21 +43,39 @@ int main(){
 	
 	// O menu
 	int option = menu();
-	switch(option){
-		case 1:
-			// Criar o jogo com 20 inimigos e 1 jogador
-			game = Game(20, 1);
-			game.start();
-			break;
-		case 2:
-			// load game:
-			cout << "OPÇAO 2";
-			break;
-		default:
-			break;
+	Carr_Guar b;
+	while(isGameOn){
+		switch(option){
+			case 0:
+				option = menu();
+				break;
+			case 1:
+				// Criar o jogo com 20 inimigos e 1 jogador
+				option = Novo_jogo(b, 1);
+				break;
+			case 2:
+				// load game:
+				cout << "OPÇAO 2";
+				break;
+			case 5:
+				isGameOn = false;
+				break;
+			case 6:
+				if(b.GetMemoria_de_jogo() == 0){
+					ClearScreen(bgChar);
+					game = Game(20, 1);
+					game.start();
+				}else{
+					cout << "\nErro!!!! A memória de jogo é: " << b.GetMemoria_de_jogo();
+					sleep(1000);
+				}
+				break;
+			default:
+				break;
+		}	
 	}
 	
 	// Pausar consola até o user premir o Enter
-	cin.get();
+	//cin.get();
 	return 0;
 }

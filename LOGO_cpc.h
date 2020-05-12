@@ -19,12 +19,6 @@ int cy = 0;
 
 using namespace std;
 
-void gotoxy(int x, int y) //função para mudar a posiçao do cursor que recebe dois valores que vão servir de coordenadas
-{
-    COORD P={x,y};//criar um ponto com coordenadas
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),P);//mover o cursor para o ponto
-}
-
 void logo(void)//função para desenhar logotipo inicial
 {
 	int x,y;

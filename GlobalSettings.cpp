@@ -72,14 +72,16 @@ int shotChance = initialShotChance; // > dispara menos vezes; < dispara mais vez
 int enemyYInit = 5; // X inicial dos inimigos da primeira linha
 int enemyYDifference = 4; // A diferença entre os X's dos inimigos da primeira linha para a segunda
 int barrierCharInt = 219; // O caráter das barreiras em int
-bool allDrop = false; // variáel para fazer descer os inimigos em sintonia
+bool allDrop = false; // variável para fazer descer os inimigos em sintonia
+int wasAllDrop = 0; // dá track ao último estado de allDrop
 double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
 int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
 
 double initialShotVelocity = 10;
 double shotVelocity = initialShotVelocity; // A velocidade dos tiros
 double initialEnemyVelocity = 5;
-double velBonus = 1;
+double initialBonus = 1;
+double velBonus = initialBonus;
 double enemyVelocity = initialEnemyVelocity; // A velocidade dos inimigos, 5 é o ideal, 10 é rápido e 2 lento
 int way = 1; // sentido de movimento dos inimigos; -1 esquerda , 1 direita
 

@@ -38,12 +38,16 @@ Game::Game(){
 void Game::start(){
 	
 	scoreT;
+	scoreT.restart();
 	
 	// preencher enemies[]
 	int i = 0;
 	while (i < numEnemies){
 		
 		gameState = 1;
+		
+		// Nome do jogador
+		
 		
 		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true);
 		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true);
@@ -129,7 +133,10 @@ void Game::start(){
     	//TESTE
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
     	cout << "PERDESTE";
+    	
     	resetVelocities();
+    	scoreT.restart();
+    	velBonus = initialBonus;
     	shotChance = initialShotChance;
     	// Se perder, recomeçar o jogo
     	gameState = 0;
@@ -141,8 +148,11 @@ void Game::start(){
 		//TESTE
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
 		cout << "GANHASTE";
+		
 		gameState += 1;
 		resetVelocities();
+		scoreT.restart();
+		velBonus = initialBonus;
 		shotChance = initialShotChance;
 		// Score aumenta com o tempo
 		// Tabela de score
@@ -331,9 +341,14 @@ void Game::updateEnemies(){
 				if (i == numEnemies) break;
 			}
 		}
+		// Resetar o wasAllDrop
+		if(wasAllDrop == 2 || wasAllDrop == 1){
+			wasAllDrop -= 1;
+		}
 		// Se algum deles colidir com a barreira então descem todos ao mesmo tempo
-		if (allDrop){
+		if (allDrop && wasAllDrop == 0){
 			way = -way;
+			wasAllDrop = 2;
 			for(int i = 0; i < numEnemies; i++){
 				if (enemies[i].isAlive() == true){
 				enemies[i].moveVertically();
