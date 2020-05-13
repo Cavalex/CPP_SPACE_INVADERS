@@ -11,6 +11,8 @@
 #define KEY_UP 72 //tecla seta para cima
 #define KEY_DOWN 80//tecla seta para baixo
 #define ENTER 13//tecla enter
+#define KEY_RIGHT 77
+#define KEY_LEFT 75
 
 //int cx=(TAMANHO_X-WIDTH)/2;
 int cx = 0;
@@ -219,4 +221,123 @@ int menu(void)//retorna o numero da opção
 	}while(1);
 }
 
+bool menu_credits()
+{
+	
+	int cx,cy,linhasret=0,tecla;
+	char m[21][67]={0};//matriz nula
+	cx=(WIDTH-66)/2;
+	cy=(HEIGHT-20)/2;
+	for(int x=0;x<21;x++)//desenho dos extremos do retângulo no ecrã
+	{
+		linhasret++;
+		gotoxy(cx,linhasret+cy);
+		for(int y=0;y<67;y++)
+		{
+			m[0][y]=178;
+			m[x][0]=178;
+			m[x][66]=178;
+			m[20][y]=178;
+			cout<<m[x][y];
+		}
+		cout<<endl;
+	}
+	gotoxy(cx+28,cy+3);
+	cout<<"Creditos"<<endl<<endl<<endl;
+	gotoxy(cx+1,cy+7);
+	cout<<"Trabalho realizado por:";
+	gotoxy(cx+3,cy+10);
+	cout<<"-Marco Oliveira A91945;";
+	gotoxy(cx+3,cy+12);
+	cout<<"-Marco Cunha A91981;";
+	gotoxy(cx+3,cy+14);
+	cout<<"-Matheus Costa A91997";
+	gotoxy(cx+3,cy+16);
+	cout<<"-Mateus Medeiros Pereira A91924";
+	gotoxy(cx+3,cy+18);
+	cout<<"-Joao Manuel Alves Pereira A91919";
+	gotoxy(cx+5,cy+20);
+	cout<<"Press Enter to back...";
+	do
+	{
+	    tecla=getch();//número da tecla
+	if(ENTER==tecla)
+	{
+		system("cls");
+		return true;
+	}
+    }while(ENTER!=tecla);
+}
 
+bool menu_Exit()
+{
+	int cx,cy,linhasret=0,tecla,option=0;
+	char m[21][67]={0};//matriz nula
+	cx=(WIDTH-66)/2;
+	cy=(HEIGHT-20)/2;
+	for(int x=0;x<21;x++)//desenho dos extremos do retângulo no ecrã
+	{
+		linhasret++;
+		gotoxy(cx,linhasret+cy);
+		for(int y=0;y<67;y++)
+		{
+			m[0][y]=178;
+			m[x][0]=178;
+			m[x][66]=178;
+			m[20][y]=178;
+			cout<<m[x][y];
+		}
+		cout<<endl;
+	}
+	gotoxy(cx+20,cy+8);
+	cout<<"Do you want to exit the game?"<<endl;
+	gotoxy(cx+28,cy+15);
+	cout<<"YES OR NO";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),240);
+	gotoxy(cx+28,cy+15);
+	cout<<"YES";
+	option=2;
+	gotoxy(0,0);
+	do
+	{
+	do
+	{
+		tecla=getch();//número da tecla
+	}while(tecla!=ENTER && tecla!=KEY_RIGHT && tecla!=KEY_LEFT);
+	switch(tecla)
+	{
+		case KEY_RIGHT:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+			gotoxy(cx+28,cy+15);
+			cout<<"YES";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),240);
+			gotoxy(cx+35,cy+15);
+			cout<<"NO";
+			option=1;
+			gotoxy(0,0);
+			break;
+		case KEY_LEFT:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+			gotoxy(cx+35,cy+15);
+			cout<<"NO";
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),240);
+			gotoxy(cx+28,cy+15);
+			cout<<"YES";
+			option=2;
+			gotoxy(0,0);
+			break;
+		case ENTER:
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+			system("cls");
+			if(option==1)
+			{
+			    return true;
+		    }
+		    if(option==2)
+		    {
+		        return false;
+		    }
+			break;
+	}
+	}while(true);
+}

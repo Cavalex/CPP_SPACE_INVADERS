@@ -81,9 +81,17 @@ int main(){
 				playersN[0]= b.GetNome_do_jogador();
 				option=6;
 				break;
-				
+			
+			case 4:
+				menu_credits();
+				option = 0;
+				break;
+			
 			case 5:
-				isGameOn = false;
+				if(!menu_Exit()) isGameOn = false;
+				else {
+					option = 0;
+				}
 				break;
 				
 			case 6:
@@ -119,7 +127,8 @@ int main(){
 				break;
 			default:
 				break;
-		}	
+		}
+		sleep(0.001); // Para não consumir tanta memória
 	}
 	
 	// Pausar consola até o user premir o Enter
