@@ -31,6 +31,36 @@ Player::Player()
 	this->lives = 0;
 }
 
+void Player::drawOn(int xC, int yC, char c){
+	SetCursorPosition(xC, yC);
+	cout << c;
+}
+
+void Player::drawEntity(){
+	int i = 0;
+	for (int yS = -sizeY; yS <= sizeY; yS++){
+		for (int xS = -sizeX; xS <= sizeX; xS++){
+			if(drawing == 1){
+				drawOn(xS + x, yS + y, nave1[i]);	
+			}
+			/*
+			else if(drawing == 2){
+				drawOn(xS + x, yS + y, inimigo2[i]);
+			}
+			*/
+			i++;
+		}
+	}
+}
+
+void Player::moveTo(int xM, int yM){
+	int lastX = x;
+	int lastY = y;
+	clearEntity();
+	setPos(xM, yM);
+	drawEntity();
+}
+
 void Player::action(){
 	
 	if (kbhit()){

@@ -44,8 +44,8 @@ void Game::start(){
 	int i = 0;
 	while (i < numEnemies){
 		
-		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true);
-		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true);
+		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
+		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
 		i++;
 		
 		/*
@@ -395,7 +395,7 @@ void Game::updatePlayerShots(){
 			for(int n = 0; n < numPlayers; n++){
 				if(playerShot[n] == true && playerShotCD[n] <= 0){
 					//shots[i] = Shot(playerShotX[n], playerShotY[n], 0, 0, '|', 1, true, 1);
-					shots[i] = Shot(players[n].x, players[n].y - 1, 0, 0, '|', 1, true, 1);
+					shots[i] = Shot(players[n].x, players[n].y - 1, 0, 0, charPlayerShot, 1, true, 1);
 					playerShot[n] = false;
 					playerShotCD[n] += shotCD;
 				}
@@ -455,7 +455,7 @@ void Game::updateShots(){
 					*/
 					for(int t = 0; t < numTotalShots; t++){
 						if(!(shots[t].isAlive())){
-							shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, '0', 1, true, -1);
+							shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, charEnemyShot, 1, true, -1);
 							break;
 						}
 					}

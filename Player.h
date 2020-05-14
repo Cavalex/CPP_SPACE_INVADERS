@@ -22,9 +22,14 @@ class Player : public Entity {
 		void gotHit();
 		int getLives();
 		string getName();
+		void drawEntity();
+		void drawOn(int, int, char);
+		void moveTo(int, int);
 		//int shootKey = playerControls[num-1][0];
 		
 	private: 
+		int nave1[3] = { 62 ,206, 60};
+		int drawing = 1;
 		int lives;
 		int num;
 		int score;

@@ -35,6 +35,9 @@ using namespace std;
 int numShotsPP = 5; // numero de tiros por jogador
 int numTotalShots = 200;
 
+char charEnemyShot = 'O';
+char charPlayerShot = '^';
+
 char playerControls[4][3] = {{72, 75, 77},
 							{119, 97, 100}, // W, A, D
 							{105, 106, 108}, // I, J, L
