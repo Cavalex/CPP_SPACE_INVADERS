@@ -44,11 +44,6 @@ void Game::start(){
 	int i = 0;
 	while (i < numEnemies){
 		
-		gameState = 1;
-		
-		// Nome do jogador
-		
-		
 		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true);
 		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true);
 		i++;
@@ -139,17 +134,22 @@ void Game::start(){
     	velBonus = initialBonus;
     	shotChance = initialShotChance;
     	// Se perder, recomeçar o jogo
-    	gameState = 0;
+    	b.SetMemoria_de_jogo(0);
+    	if(b.GetMemoria_de_jogo() == 0){
+    		option = 0;
+		}
 		// Reiniciar Score
 		score = 0;
     	// Repetir jogo (todo)
+    	sleep(4);
 	}
 	else{ // Se acabou o jogo, mas há jogadores vivos:
 		//TESTE
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
 		cout << "GANHASTE";
 		
-		gameState += 1;
+		b.SetMemoria_de_jogo(b.GetMemoria_de_jogo() + 1);
+		b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);
 		resetVelocities();
 		scoreT.restart();
 		velBonus = initialBonus;
@@ -157,6 +157,7 @@ void Game::start(){
 		// Score aumenta com o tempo
 		// Tabela de score
 		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
+		sleep(4);
 	}
 }
 
@@ -164,6 +165,9 @@ void Game::updateUI(){
 	// UI
 	SetCursorPosition(6, 1);
 	cout << "Name: " << players[0].getName() << " ";
+	
+	SetCursorPosition(WIDTH/2 - 8, 1);
+	cout << "Level: " << b.GetMemoria_de_jogo();
 	
 	SetCursorPosition(WIDTH - 16, 1);
 	cout << "Time: " << scoreT.getTimePassed() << " ";

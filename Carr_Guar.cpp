@@ -36,11 +36,11 @@ int Carr_Guar::GetFicheiro(){
 }
 //Sets
 void Carr_Guar::SetNome_do_jogador(string nome){
-	this-> nome_do_jogador= nome;
+	this-> nome_do_jogador = nome;
 }
 
 void Carr_Guar::SetMemoria_de_jogo(int i){
-	this-> memoria_de_jogo= i;
+	this-> memoria_de_jogo = i;
 }
 
 void Carr_Guar::SetFicheiro(int fich){
@@ -209,7 +209,6 @@ void Carr_Guar::SetFicheiro(int fich){
 
 // GUARDAR O JOGO:
 void Carr_Guar::Guardar_jogo(int opcao, int estado, string nome){
-
 	
 	if(opcao==1){// caso , o jogo esteja carregado no ficheiro 1, entrar aqui:
 		ofstream guardar1 ("guardar jogo 1.txt");// Abre o ficheiro para escrita.
