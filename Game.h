@@ -16,7 +16,6 @@
 #include "Shot.h"
 #include "Timer.cpp"
 #include "Barrier.cpp"
-#include "Boss.h"
 
 #ifndef GAME_H
 #define GAME_H

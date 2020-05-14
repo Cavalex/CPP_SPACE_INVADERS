@@ -18,7 +18,6 @@
 #include "Player.cpp"// Jogador
 #include "Timer.cpp" // O Timer
 #include "Game.cpp"// Niveis
-#include "Boss.cpp" // Boss
 //#include "GlobalSettings.cpp"
 // Não podemos incluir a classe Shot pq já está incluída no Player.cpp
 //#include "Shot.cpp"

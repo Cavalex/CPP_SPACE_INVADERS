@@ -48,6 +48,9 @@ void Enemy::drawEntity(){
 				drawOn(xS + x, yS + y, inimigo2[i]);
 			}
 			else if(drawing == 3){
+				drawOn(xS + x, yS + y, inimigo3[i]);
+			}
+			else if(drawing == 4){
 				drawOn(xS + x, yS + y, boss[i]);
 			}
 			i++;

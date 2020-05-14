@@ -12,7 +12,6 @@
 #include "Timer.cpp"
 #include "Enemy.h"
 #include "Shot.h"
-#include "Boss.h"
 
 using namespace std;
 
@@ -28,7 +27,6 @@ Game::Game(int n, int p, bool b = false){
 	this->gameOver = false;
 	this->playerLost = false;
 	this->hasBoss = b;
-	
 }
 
 Game::Game(){
@@ -160,9 +158,7 @@ void Game::start(){
 		shotChance = initialShotChance;
 		
 		// Score aumenta com o tempo
-		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 4);
-		cout << scoreT.getTimePassed();
-		score += -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500;
+		score += -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do tempo
 		
 		// Tabela de score
 		//
