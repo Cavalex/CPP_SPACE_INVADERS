@@ -107,10 +107,8 @@ void Carr_Guar::SetFicheiro(int fich){
 	}else{
 		guardar1 >> nome1 >> estado1; 
 		guardar1.close();
-		if(estado1=="3"){
-			estado1="BOSS 1";// sbstitui o "level: 3" por "level: BOSS 1" 
-		}if(estado1=="6"){
-			estado1="BOSS 2";// sbstitui o "level: 6" por "level: BOSS 2"	
+		if(estado1=="4"){
+			estado1="BOSS";// sbstitui o "level: 3" por "level: BOSS 1" 
 		}
 	}
 	
@@ -121,10 +119,8 @@ void Carr_Guar::SetFicheiro(int fich){
 	}else{
 		guardar2 >> nome2 >> estado2; 
 		guardar2.close();
-		if(estado2=="3"){
-			estado2="BOSS 1";// sbstitui o "level: 3" por "level: BOSS 1"
-		}if(estado2=="6"){
-			estado2="BOSS 2";// sbstitui o "level: 6" por "level: BOSS 2"
+		if(estado2=="4"){
+			estado2="BOSS";// sbstitui o "level: 3" por "level: BOSS 1"
 		}
 	}
 	
@@ -135,11 +131,9 @@ void Carr_Guar::SetFicheiro(int fich){
 	}else{
 		guardar3 >> nome3 >> estado3; 
 		guardar3.close();
-		if(estado3=="3"){
-			estado3="BOSS 1";// sbstitui o "level: 3" por "level: BOSS 1"
-		}if(estado3=="6"){
-			estado3="BOSS 2";// sbstitui o "level: 6" por "level: BOSS 2"	
-		}	
+		if(estado3=="4"){
+			estado3="BOSS";// sbstitui o "level: 3" por "level: BOSS 1"
+		}
 	}
 	//atribuição dos tamanhos das strings:
 	lenn1=nome1.length();

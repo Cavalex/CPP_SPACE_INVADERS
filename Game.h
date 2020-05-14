@@ -16,6 +16,7 @@
 #include "Shot.h"
 #include "Timer.cpp"
 #include "Barrier.cpp"
+#include "Boss.h"
 
 #ifndef GAME_H
 #define GAME_H
@@ -23,7 +24,7 @@
 class Game {
 	public:
 		Game();
-		Game(int, int);
+		Game(int, int, bool);
 		friend class Carr_Guar;
 		void updatePlayers();
 		void updateEnemies();
@@ -44,6 +45,7 @@ class Game {
 		int numEnemies;
 		int numDeadEnemies;
 		int numPlayers;
+		bool hasBoss;
 		
 		// Têm que ser públicas para evitar usar gets de arrays que podem complicar muito o código e
 		// não poupam linhas, assim tbm fica mais fácil de ler

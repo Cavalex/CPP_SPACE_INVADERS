@@ -6,11 +6,13 @@
 #include <conio.h>
 #include <algorithm>
 
+#include "HS.h"
 #include "GlobalSettings.cpp"
 #include "Game.h"
 #include "Timer.cpp"
 #include "Enemy.h"
 #include "Shot.h"
+#include "Boss.h"
 
 using namespace std;
 
@@ -19,12 +21,14 @@ Timer t;
 Timer t2;
 Timer scoreT;
 
-Game::Game(int n, int p){
+Game::Game(int n, int p, bool b = false){
 	this->numEnemies = n;
 	this->numPlayers = p;
 	this->numDeadEnemies = 0;
 	this->gameOver = false;
 	this->playerLost = false;
+	this->hasBoss = b;
+	
 }
 
 Game::Game(){
@@ -33,6 +37,7 @@ Game::Game(){
 	this->numDeadEnemies = 0;
 	this->gameOver = false;
 	this->playerLost = false;
+	this->hasBoss = false;
 }
 
 void Game::start(){
@@ -42,25 +47,24 @@ void Game::start(){
 	
 	// preencher enemies[]
 	int i = 0;
-	while (i < numEnemies){
-		
-		if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
-		else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
-		i++;
-		
-		/*
-		enemies1[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit, 0, 0, 'X', 10, 0, true);
-		enemies2[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + enemyYDifference, 0, 0, 'X', 10, 0, true);
-		enemies3[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + 2 * enemyYDifference, 0, 0, 'X', 10, 0, true);
-		i++;
-		*/
-		
-		/*
-		int size = 9;
-		char draw[9] = {' ', 219, ' ',
-						219, 219, 219,
-						' ', '|', ' '};
-		*/
+	if(!hasBoss){
+		while (i < numEnemies){
+			
+			if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
+			else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
+			i++;
+			
+			/*
+			enemies1[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit, 0, 0, 'X', 10, 0, true);
+			enemies2[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + enemyYDifference, 0, 0, 'X', 10, 0, true);
+			enemies3[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + 2 * enemyYDifference, 0, 0, 'X', 10, 0, true);
+			i++;
+			*/
+		}	
+	}
+	else{
+		//enemies[i] = Boss(12, 10, 'X', 10, 0, true, 10);
+		enemies[i] = Enemy(25, 7, 15, 3, 'X', 10, 0, true, 4); 
 	}
 	
 	// preencher players[]
@@ -103,10 +107,11 @@ void Game::start(){
     	if(!gameOver) updatePlayers();
     	if(!gameOver) checkCols();
     	if(!gameOver) checkGameOver();
-    	if(!gameOver) updateUI();
+    	updateUI();
     	
     	//
 		// TESTE
+		/*
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
@@ -117,6 +122,7 @@ void Game::start(){
 		cout << "Alive Shots: " << a << " ";
 		cout << "|| Can Enemy Shoot?: " << canShoot << " ";
 		cout << "|| Lives: " << players[0].getLives() << " ";
+		*/
 		
 		// O usleep() estava a causar erros no movimento, portanto decidimos usar o sleep()
 		sleep(0.01);
@@ -124,13 +130,13 @@ void Game::start(){
     
     // Quando o jogo acabar:
     // Se todos os jogadores estão mortos:
+    HS scoreManager;
     if(!checkPlayersLives() || playerLost){
     	//TESTE
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
     	cout << "PERDESTE";
     	
     	resetVelocities();
-    	scoreT.restart();
     	velBonus = initialBonus;
     	shotChance = initialShotChance;
     	// Se perder, recomeçar o jogo
@@ -141,36 +147,75 @@ void Game::start(){
 		// Reiniciar Score
 		score = 0;
     	// Repetir jogo (todo)
-    	sleep(4);
+    	scoreT.restart();
+    	sleep(400);
 	}
 	else{ // Se acabou o jogo, mas há jogadores vivos:
 		//TESTE
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
 		cout << "GANHASTE";
 		
-		b.SetMemoria_de_jogo(b.GetMemoria_de_jogo() + 1);
-		b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);
 		resetVelocities();
-		scoreT.restart();
 		velBonus = initialBonus;
 		shotChance = initialShotChance;
+		
 		// Score aumenta com o tempo
+		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 4);
+		cout << scoreT.getTimePassed();
+		score += -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500;
+		
 		// Tabela de score
+		//
 		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
+		scoreManager.SetScore(b.GetMemoria_de_jogo());
+		scoreManager.Bubble_Sort_score(50, playersN[0], b.GetMemoria_de_jogo());
+		
+		scoreT.restart();
+		score = 0;
+		
+		// Aumentar o nível
+		if(b.GetMemoria_de_jogo() != 4){
+			b.SetMemoria_de_jogo(b.GetMemoria_de_jogo() + 1);
+			b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);	
+		}
 		sleep(4);
 	}
 }
 
 void Game::updateUI(){
-	// UI
-	SetCursorPosition(6, 1);
+	// NOME
+	SetCursorPosition(5, 1);
 	cout << "Name: " << players[0].getName() << " ";
 	
-	SetCursorPosition(WIDTH/2 - 8, 1);
+	// BOSS HP
+	if(b.GetMemoria_de_jogo() == 4){
+		SetCursorPosition((WIDTH - (initialBossHP + 9)) / 2, 2);
+		cout << " Boss HP: ";
+		for(int i = 0; i < bossHP; i++){
+			cout << (char)219;
+		}
+		cout << " ";
+	}
+	
+	// NIVEL
+	SetCursorPosition(WIDTH/2 - 6, 1);
 	cout << "Level: " << b.GetMemoria_de_jogo();
 	
+	// TEMPO
 	SetCursorPosition(WIDTH - 16, 1);
 	cout << "Time: " << scoreT.getTimePassed() << " ";
+	
+	// VIDAS
+	SetCursorPosition(5, HEIGHT - 2);
+	cout << "Score: " << score;
+	
+	// VIDAS
+	SetCursorPosition(WIDTH - 20, HEIGHT - 2);
+	cout << "Lives: ";	
+	for(int i = 0; i < players[0].getLives(); i++){
+		cout << "<3 ";
+	}
+	cout << "   ";
 }
 
 void Game::resetVelocities(){
@@ -216,11 +261,20 @@ void Game::checkCols(){
 						//SetCursorPosition(enemies[i].x, enemies[i].y);
 						//cout << "MOR";
 						// Matá-los e apagá-los
+						if(!hasBoss || bossHP - 1 <= 0){
+							enemies[i].setLife(false);	
+							enemies[i].clearEntity();
+							numDeadEnemies += 1;
+							if(hasBoss) score += 10; // Total de 400 pontos para 40 de vida
+							if(enemies[i].drawing == 1) score += 10;
+							if(enemies[i].drawing == 2) score += 15;
+							if(enemies[i].drawing == 3) score += 20;
+						}
+						else if (hasBoss){
+							bossHP -= 1;
+						}
 						shots[s].setLife(false);
-						enemies[i].setLife(false);
 						shots[s].clearEntity();
-						enemies[i].clearEntity();
-						numDeadEnemies += 1;
 					}
 				}
 			}
@@ -427,11 +481,6 @@ void Game::updateShots(){
 							}
 							else{
 								canShoot = false;
-								// TESTE
-								/*
-								SetCursorPosition(enemies[i].x, enemies[i].y);
-								cout << "CANT";
-								*/
 								break;
 							}
 						}
@@ -448,14 +497,9 @@ void Game::updateShots(){
 				//SetCursorPosition(0, 1);
 				//cout << "r: " << r << " ";
 				if(r == 10){
-					// TESTE
-					/*
-					SetCursorPosition(enemies[i].x, enemies[i].y);
-					cout << "SHOT";
-					*/
 					for(int t = 0; t < numTotalShots; t++){
 						if(!(shots[t].isAlive())){
-							shots[t] = Shot(enemies[i].x + enemies[i].getSizeX(), enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, charEnemyShot, 1, true, -1);
+							shots[t] = Shot(enemies[i].x, enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, charEnemyShot, 1, true, -1);
 							break;
 						}
 					}
@@ -465,15 +509,6 @@ void Game::updateShots(){
 		}
 		
 		for(int i = 0; i < numPlayers; i++) if(!(playerShotCD[i]) <= 0) playerShotCD[i] -= 1;
-		
-		//TESTE
-		SetCursorPosition(0, 1);
-		cout << "P1 CD: " << playerShotCD[0] << " ";
-		SetCursorPosition(j, 2);
-		if(playerShot[0]){
-			cout << "Shot!";
-			j += 7;
-		}
 	
 		// Update do movimento dos tiros
 		for(int i = 0; i < numTotalShots; i++){

@@ -7,20 +7,21 @@
 #include <unistd.h>
 #include <ctime>
 #include <vector>
+
 //Includes de Classes:
-#include "HS.h"
-#include "HS.cpp"
-#include "Carr_Guar.cpp"
+#include "HS.cpp" // Classe que guarda/dá load ao high score
+#include "Carr_Guar.cpp" // Para Carregar/Guardar o jogo
 #include "Carr_Guar.h"// carregar e guardar jogo, e Menus de funcionamento de Novo jogo e Carregar Jogo.
 #include "LOGO_cpc.h"// logotipo inicial
-#include "Entity.cpp"
+#include "Entity.cpp" // Entity, de onde derivam os inimigos, o jogador, as barreiras e o boss
 #include "Enemy.cpp"// Inimigo
 #include "Player.cpp"// Jogador
-#include "Timer.cpp"
+#include "Timer.cpp" // O Timer
 #include "Game.cpp"// Niveis
+#include "Boss.cpp" // Boss
+//#include "GlobalSettings.cpp"
 // Não podemos incluir a classe Shot pq já está incluída no Player.cpp
 //#include "Shot.cpp"
-//#include "GlobalSettings.cpp"
 
 using namespace std;
 
@@ -115,26 +116,22 @@ int main(){
 			case 6:
 				if(b.GetMemoria_de_jogo() == 1){
 					ClearScreen(bgChar);
-					cout << "NIVEL 1";
 					game = Game(20, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 2){
 					ClearScreen(bgChar);
-					cout << "NIVEL 2";
 					game = Game(20, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 3){
 					ClearScreen(bgChar);
-					cout << "NIVEL 3";
 					game = Game(20, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 4){
 					ClearScreen(bgChar);
-					cout << "NIVEL 4";
-					game = Game(20, 1);
+					game = Game(1, 1, true);
 					game.start();
 				}
 				else{

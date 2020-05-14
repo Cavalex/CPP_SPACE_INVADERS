@@ -33,7 +33,9 @@ using namespace std;
 // vamos ignorar esta primeira variável pq acrescentamos um cooldown nos tiros,
 // ter um limite de tiros é inútil
 int numShotsPP = 5; // numero de tiros por jogador
-int numTotalShots = 200;
+int numTotalShots = 200; // numero de tiros total
+int initialBossHP = 40;
+int bossHP = initialBossHP;
 
 char charEnemyShot = 'O';
 char charPlayerShot = '^';
