@@ -155,7 +155,12 @@ int HS:: High_score_player_control(int nivel){ // retorna o nivel (estado)
 	
 	char nl[5]={'L','E','V','E','L'};
 	char nb[5]={'B','O','S','S',' '}, botao;
-	SetScore(nivel);
+	if(nivel!=7){
+		SetScore(nivel);
+	}else{
+		SetScore(this->memoria);
+	}
+	
 	for(int i= 0;i<5;i++){
 		if((  nivel ==4 ) && nivel !=7){
 			this -> Hs[5][i+44]= nb[i];
@@ -369,11 +374,11 @@ void HS::Bubble_Sort_score(int score_Transporte, string nome_Transporte, int niv
 			s.close();// fecha ficheiro;
 	
 	
-			this -> p1 = v[1];// 1º Lugar
-			this -> p2 = v[2];// 2º Lugar
-			this -> p3 = v[3];// 3º Lugar
-			this -> p4 = v[4];// 4º Lugar
-			this -> p5 = v[5];// 5º Lugar
+			this -> p1 = v[0];// 1º Lugar
+			this -> p2 = v[1];// 2º Lugar
+			this -> p3 = v[2];// 3º Lugar
+			this -> p4 = v[3];// 4º Lugar
+			this -> p5 = v[4];// 5º Lugar
 		Guarda_Score(nivel); // Guarda o score ordenado;
 	}
 }
