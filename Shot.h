@@ -19,6 +19,7 @@ class Shot : public Entity {
 		bool isAlive();
 		void move();
 		void checkCol();
+		int getType();
 		
 	private:
 		int dmg;

@@ -45,6 +45,8 @@ void Shot::move(){
 	else if(type == -1) moveTo(x, y+1); // tiro inimigo
 }
 
+int Shot::getType(){ return type; }
+
 void Shot::checkCol(){
 	if(y <= 1 || y >= HEIGHT - 2){
 		alive = false;
