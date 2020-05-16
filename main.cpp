@@ -17,6 +17,7 @@
 #include "Enemy.cpp"// Inimigo
 #include "Player.cpp"// Jogador
 #include "Timer.cpp" // O Timer
+#include "story.cpp"
 #include "Game.cpp"// Niveis
 //#include "GlobalSettings.cpp"
 // Não podemos incluir a classe Shot pq já está incluída no Player.cpp
@@ -68,6 +69,7 @@ int main(){
 				b.SetNome_do_jogador(Nome_player);
 				b.SetFicheiro(fich);
 				b.SetMemoria_de_jogo(1);
+				story.story_intro();
 				option =6;
 				break;
 			case 2:
@@ -115,20 +117,28 @@ int main(){
 			case 6:
 				if(b.GetMemoria_de_jogo() == 1){
 					ClearScreen(bgChar);
+					story.story_lvl1();
+					ClearScreen(bgChar);
 					game = Game(20, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 2){
+					ClearScreen(bgChar);
+					story.story_lvl2();
 					ClearScreen(bgChar);
 					game = Game(20, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 3){
 					ClearScreen(bgChar);
+					story.story_lvl3();
+					ClearScreen(bgChar);
 					game = Game(20, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 4){
+					ClearScreen(bgChar);
+					story.story_boss();
 					ClearScreen(bgChar);
 					game = Game(1, 1, true);
 					game.start();

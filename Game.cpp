@@ -12,8 +12,12 @@
 #include "Timer.cpp"
 #include "Enemy.h"
 #include "Shot.h"
+#include "story.h"
 
 using namespace std;
+
+// O story Manager
+Story story;
 
 // O timer para o clock (o movimento dos inimigos)
 Timer t;
@@ -63,7 +67,7 @@ void Game::start(){
 	else{
 		//enemies[i] = Boss(12, 10, 'X', 10, 0, true, 10);
 		enemies[i] = Enemy(25, 7, 15, 3, 'X', 10, 0, true, 4); 
-		enemyVelocity = 100;
+		enemyVelocity = 6;
 	}
 	
 	// preencher players[]
@@ -107,6 +111,7 @@ void Game::start(){
     	if(!gameOver) checkCols();
     	if(!gameOver) checkGameOver();
     	updateUI();
+    	
     	if(hasBoss && bossHP <= 0){
     		enemies[0].setLife(false);
     		gameOver = true;
@@ -137,16 +142,13 @@ void Game::start(){
 		sleep(0.01);
     }
     
-    sleep(10);
-    
     // Quando o jogo acabar:
     // Se todos os jogadores estão mortos:
     HS scoreManager;
     if((bossHP > 0 && hasBoss) || !checkPlayersLives() || playerLost){
     	ClearScreen(bgChar);
-		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
-    	cout << "PERDESTE";
-    	sleep(2);
+    	story.story_loss();
+		ClearScreen(bgChar);
     	
     	// Se perder, recomeçar o jogo
     	b.SetMemoria_de_jogo(0);
@@ -162,12 +164,8 @@ void Game::start(){
 	}
 	else{ // Se acabou o jogo, mas há jogadores vivos:
 		ClearScreen(bgChar);
-		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
-		cout << "GANHASTE";
-		sleep(2);
-		
 		// Score aumenta com o tempo
-		int scoreBonus = -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do tempo
+		int scoreBonus = -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do score com o tempo
 		if(scoreBonus >= 0){
 			score += scoreBonus; // função de aumento do tempo	
 		}
@@ -175,7 +173,7 @@ void Game::start(){
 		// Tabela de score
 		SetCursorPosition(WIDTH/2 - 8, HEIGHT/2);
 		cout << "SCORE: " << score;
-		sleep(3);
+		sleep(3.5);
 		
 		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
 		scoreManager.SetScore(b.GetMemoria_de_jogo());
@@ -190,6 +188,9 @@ void Game::start(){
 			b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);	
 		}
 		else {
+			ClearScreen(bgChar);
+			story.story_win();
+			ClearScreen(bgChar);
 			// CRÉDITOS
 			ClearScreen(bgChar);
 			option = 4;

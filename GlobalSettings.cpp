@@ -52,7 +52,7 @@ char playerControls2[4][3] = {{VK_UP, VK_LEFT, VK_RIGHT},
 							{'W', 'A', 'D'}, // W, A, D
 							{105, 106, 108}, // I, J, L
 							{116, 102, 104}}; // T, F, H
-				
+
 int option; // O valor que foi selecionado no menu
 Carr_Guar b; // O objeto que vai ser usado para controlar o estado do jogo.
 int score = 0;

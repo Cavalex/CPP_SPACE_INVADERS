@@ -2,4 +2,4 @@ MAT4 716
 koae 707
 MAT3 702
 MAT1 696
-kolp 50
+MAT6 672
