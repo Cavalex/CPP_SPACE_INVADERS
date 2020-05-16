@@ -34,6 +34,7 @@ class Game {
 		void start();
 		void menu();
 		
+		void resetMostValues();
 		void resetVelocities();
 		void checkCols();
 		void checkGameOver();

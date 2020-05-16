@@ -34,7 +34,10 @@ using namespace std;
 // ter um limite de tiros é inútil
 int numShotsPP = 5; // numero de tiros por jogador
 int numTotalShots = 200; // numero de tiros total
-int initialBossHP = 40;
+int initialBossHP = 40; // A vida inicial dele
+int bossShotChance = 1; // A quantidade de tiros que o boss dispara
+int initialBossBonus = 0;
+int bossBonus = initialBossBonus;
 int bossHP = initialBossHP;
 
 char charEnemyShot = 'O';
@@ -81,6 +84,7 @@ int enemyYDifference = 4; // A diferença entre os X's dos inimigos da primeira l
 int barrierCharInt = 219; // O caráter das barreiras em int
 bool allDrop = false; // variável para fazer descer os inimigos em sintonia
 int wasAllDrop = 0; // dá track ao último estado de allDrop
+int preventValue = 6; // o valor máximo do wasAllDrop
 double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
 int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
 

@@ -58,7 +58,7 @@ void Game::start(){
 			enemies3[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit + 2 * enemyYDifference, 0, 0, 'X', 10, 0, true);
 			i++;
 			*/
-		}	
+		}
 	}
 	else{
 		//enemies[i] = Boss(12, 10, 'X', 10, 0, true, 10);
@@ -121,60 +121,65 @@ void Game::start(){
 		cout << "|| Can Enemy Shoot?: " << canShoot << " ";
 		cout << "|| Lives: " << players[0].getLives() << " ";
 		*/
-		
-		// O usleep() estava a causar erros no movimento, portanto decidimos usar o sleep()
-		sleep(0.01);
+
+		usleep(0.01);
     }
     
     // Quando o jogo acabar:
     // Se todos os jogadores estão mortos:
     HS scoreManager;
     if(!checkPlayersLives() || playerLost){
-    	//TESTE
+    	ClearScreen(bgChar);
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
     	cout << "PERDESTE";
+    	sleep(2);
     	
-    	resetVelocities();
-    	velBonus = initialBonus;
-    	shotChance = initialShotChance;
     	// Se perder, recomeçar o jogo
     	b.SetMemoria_de_jogo(0);
     	if(b.GetMemoria_de_jogo() == 0){
     		option = 0;
 		}
 		// Reiniciar Score
-		score = 0;
-    	// Repetir jogo (todo)
-    	scoreT.restart();
-    	sleep(400);
+		scoreT.restart();
+		resetMostValues();
+		SetCursorPosition(WIDTH/2 - 15, HEIGHT/2 - 2);
+    	cout << "Agora vais para o menu.";
+    	sleep(2.5);
 	}
 	else{ // Se acabou o jogo, mas há jogadores vivos:
-		//TESTE
+		ClearScreen(bgChar);
 		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2 - 2);
 		cout << "GANHASTE";
-		
-		resetVelocities();
-		velBonus = initialBonus;
-		shotChance = initialShotChance;
+		sleep(2);
 		
 		// Score aumenta com o tempo
-		score += -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do tempo
+		int scoreBonus = -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do tempo
+		if(scoreBonus >= 0){
+			score += scoreBonus; // função de aumento do tempo	
+		}
 		
 		// Tabela de score
-		//
+		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2);
+		cout << "SCORE: " << score;
+		sleep(3);
+		
 		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
 		scoreManager.SetScore(b.GetMemoria_de_jogo());
-		scoreManager.Bubble_Sort_score(50, playersN[0], b.GetMemoria_de_jogo());
+		scoreManager.Bubble_Sort_score(score, playersN[0], b.GetMemoria_de_jogo());
 		
 		scoreT.restart();
-		score = 0;
+		resetMostValues();
 		
 		// Aumentar o nível
 		if(b.GetMemoria_de_jogo() != 4){
 			b.SetMemoria_de_jogo(b.GetMemoria_de_jogo() + 1);
 			b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);	
 		}
-		sleep(4);
+		else {
+			// CRÉDITOS
+			ClearScreen(bgChar);
+			option = 4;
+		}
 	}
 }
 
@@ -201,7 +206,7 @@ void Game::updateUI(){
 	SetCursorPosition(WIDTH - 16, 1);
 	cout << "Time: " << scoreT.getTimePassed() << " ";
 	
-	// VIDAS
+	// SCORE
 	SetCursorPosition(5, HEIGHT - 2);
 	cout << "Score: " << score;
 	
@@ -217,6 +222,15 @@ void Game::updateUI(){
 void Game::resetVelocities(){
 	enemyVelocity = initialEnemyVelocity;
 	shotVelocity = initialShotVelocity;
+}
+
+void Game::resetMostValues(){
+	velBonus = initialBonus;
+	shotChance = initialShotChance;
+	resetVelocities();
+	bossHP = initialBossHP;
+	bossBonus = initialBossBonus;
+	score = 0;
 }
 
 void Game::checkGameOver(){
@@ -257,18 +271,17 @@ void Game::checkCols(){
 						//SetCursorPosition(enemies[i].x, enemies[i].y);
 						//cout << "MOR";
 						// Matá-los e apagá-los
-						if(!hasBoss || bossHP - 1 <= 0){
-							enemies[i].setLife(false);	
-							enemies[i].clearEntity();
-							numDeadEnemies += 1;
-							if(hasBoss) score += 10; // Total de 400 pontos para 40 de vida
-							if(enemies[i].drawing == 1) score += 10;
-							if(enemies[i].drawing == 2) score += 15;
-							if(enemies[i].drawing == 3) score += 20;
-						}
-						else if (hasBoss){
-							bossHP -= 1;
-						}
+						/*
+						*/
+						if(!hasBoss || (numEnemies - numDeadEnemies > 1) && i != 0) enemies[i].setLife(false);	
+						if(!hasBoss || (numEnemies - numDeadEnemies > 1) && i != 0) enemies[i].clearEntity();
+						if(!hasBoss || (numEnemies - numDeadEnemies > 1) && i != 0) numDeadEnemies += 1;
+						if(hasBoss && (numEnemies - numDeadEnemies == 1)) score += 15; // Total de 600 pontos para 40 de vida
+						if(hasBoss && (numEnemies - numDeadEnemies == 1)) bossHP -= 1;
+						if(hasBoss && (numEnemies - numDeadEnemies == 1) && bossHP <= 0) enemies[0].setLife(false);
+						if(enemies[i].drawing == 1) score += 10;
+						if(enemies[i].drawing == 2) score += 15;
+						if(enemies[i].drawing == 3) score += 20;
 						shots[s].setLife(false);
 						shots[s].clearEntity();
 					}
@@ -375,14 +388,41 @@ void Game::updateEnemies(){
 	int checkedCol = false;
 	
 	if (t.getTimePassed()>=1/(enemyVelocity)){
+		
+		if(enemies[0].y == 9 && enemies[0].x == WIDTH/2){ // O boss é o enemies[0]
+			if(hasBoss && bossBonus == 0){ // Se toda a gente está morta excepto o boss
+				bossBonus += 1;
+				numEnemies += 3;
+				for(int i = 0; i < numTotalShots; i++){
+					if(shots[i].isAlive()){
+						shots[i].setLife(false);
+						shots[i].clearEntity();	
+					}
+				}
+				for(int i = 1; i < numEnemies; i++){
+					enemies[i] = Enemy(WIDTH/2 + 5 - 10*i, 16, 1, 1, 'X', 10, 0, true, 1);
+				}
+			}
+		}
+		
 		for(int i = 0; i < numEnemies*2; i++){
 			// Para ver se algum inimigo colidiu com a parede antes de movê-los
 			// Daí o numEnemies*2, para fazer tudo no mesmo for
+			if(hasBoss && (numEnemies-numDeadEnemies != 1)){
+				if(i == 0) continue;
+			}
+			
+			if(enemies[i].y >= barrierMaxHeight){
+				gameOver = true;
+				playerLost = true;
+			}
+			
 			if (!(checkedCol)){
 				if(enemies[i].collidedWall()){
 					allDrop = true;
 					break;
 				}
+				
 				if(i == numEnemies - 1){
 					checkedCol = true;
 					i = -1;
@@ -396,14 +436,15 @@ void Game::updateEnemies(){
 			}
 		}
 		// Resetar o wasAllDrop
-		if(wasAllDrop == 2 || wasAllDrop == 1){
+		if(wasAllDrop >= 0 && wasAllDrop <= preventValue){
 			wasAllDrop -= 1;
 		}
 		// Se algum deles colidir com a barreira então descem todos ao mesmo tempo
-		if (allDrop && wasAllDrop == 0){
+		if (allDrop && wasAllDrop <= 0){
 			way = -way;
-			wasAllDrop = 2;
+			wasAllDrop = preventValue;
 			for(int i = 0; i < numEnemies; i++){
+				if(hasBoss && i == 0 && (numEnemies - numDeadEnemies > 1)) continue;
 				if (enemies[i].isAlive() == true){
 				enemies[i].moveVertically();
 				}
@@ -487,18 +528,34 @@ void Game::updateShots(){
 				}
 			}
 			if(canShoot){
-				int r = getRandomNumber(1, shotChance);
+				int r;
 				// TESTE
 				//int r = 1;
 				//SetCursorPosition(0, 1);
 				//cout << "r: " << r << " ";
-				if(r == 10){
-					for(int t = 0; t < numTotalShots; t++){
-						if(!(shots[t].isAlive())){
-							shots[t] = Shot(enemies[i].x, enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, charEnemyShot, 1, true, -1);
-							break;
+				if(hasBoss && (numEnemies - numDeadEnemies == 1)){
+					r = getRandomNumber(1, bossShotChance);
+					if(r == 1){
+						int g = getRandomNumber(-enemies[i].getSizeX(), enemies[i].getSizeX());
+						for(int t = 0; t < numTotalShots; t++){
+							if(!(shots[t].isAlive())){
+								shots[t] = Shot(enemies[i].x + g, enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, charEnemyShot, 1, true, -1);
+								break;
+							}
 						}
 					}
+					break;
+				}
+				if((numEnemies - numDeadEnemies) > 1){
+					r = getRandomNumber(1, shotChance);
+					if(r == 1){
+						for(int t = 0; t < numTotalShots; t++){
+							if(!(shots[t].isAlive())){
+								shots[t] = Shot(enemies[i].x, enemies[i].y + enemies[i].getSizeY() + 1, 0, 0, charEnemyShot, 1, true, -1);
+								break;
+							}
+						}
+					}	
 				}
 			}
 			canShoot = true;
