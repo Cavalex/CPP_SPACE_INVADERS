@@ -11,7 +11,7 @@
 #include "story.h"
 
 using namespace std;
-//funçao reticencias
+//funÃ§ao reticencias
 void Story::reticencias(){
 	for(int i = 0; i < 3; i++){
 		Sleep(1000);
@@ -94,7 +94,7 @@ void Story::story_lvl2(){
 	cout << "But prepare for your next battle.";
 	SetCursorPosition(WIDTH/3 ,(HEIGHT/3)+2);
 	Sleep(3000);
-	cout << "We'vecaught sight of more enemies, take care!";
+	cout << "We've caught sight of more enemies, take care!";
 
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
