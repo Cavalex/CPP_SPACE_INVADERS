@@ -57,7 +57,7 @@ int option; // O valor que foi selecionado no menu
 Carr_Guar b; // O objeto que vai ser usado para controlar o estado do jogo.
 int score = 0;
 int fich; // O ficheiro onde o jogo está a ser "corrido" (salvar/guardar)
-					
+
 //TESTE
 int j = 0;
 
@@ -85,7 +85,8 @@ int barrierCharInt = 219; // O caráter das barreiras em int
 bool allDrop = false; // variável para fazer descer os inimigos em sintonia
 int wasAllDrop = 0; // dá track ao último estado de allDrop
 int preventValue = 6; // o valor máximo do wasAllDrop
-double spaceBtEnemies = 5; // O espaço entre os inimigos (de centro a centro)
+double normalSpaceBtEnemies = 6;
+double spaceBtEnemies = normalSpaceBtEnemies; // O espaço entre os inimigos (de centro a centro)
 int numEnemyShots = 0; // O número de tiros inimigos, provavelmente não vai ser preciso
 
 double initialShotVelocity = 10;
@@ -96,7 +97,7 @@ double velBonus = initialBonus;
 double enemyVelocity = initialEnemyVelocity; // A velocidade dos inimigos, 5 é o ideal, 10 é rápido e 2 lento
 int way = 1; // sentido de movimento dos inimigos; -1 esquerda , 1 direita
 
-string playersN[4] = {"Cavalex", "Joao", "Marco" ,"Matheus"};
+string playersN[4] = {"Mateus", "Joao", "Marco" ,"Matheus"}; // Estes nomes não são permanentes
 
 int getRandomNumber(int min, int max){
 	// um número aleatório entre 0 e a

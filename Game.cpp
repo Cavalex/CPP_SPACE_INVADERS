@@ -16,10 +16,10 @@
 
 using namespace std;
 
-// O story Manager
+// Para criarmos a história
 Story story;
 
-// O timer para o clock (o movimento dos inimigos)
+// Os timers para os movimentos dos inimigos e dos jogadores
 Timer t;
 Timer t2;
 Timer scoreT;
@@ -52,9 +52,26 @@ void Game::start(){
 	if(!hasBoss){
 		while (i < numEnemies){
 			
-			if(i <= numEnemies/2 - 1) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
-			else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
-			i++;
+			if(numEnemies == 20){
+				if(i <= 9) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
+				else enemies[i] = Enemy(4 + spaceBtEnemies*(i - numEnemies/2), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
+				i++;
+			}
+			
+			if(numEnemies == 30){
+				if(i <= 9) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
+				else if(i >= 10 && i <= 19) enemies[i] = Enemy(4 + spaceBtEnemies*(i - 10), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
+				else enemies[i] = Enemy(4 + spaceBtEnemies*(i - 20), enemyYInit + 2 * enemyYDifference, 1, 1, 'X', 10, 0, true, 3);
+				i++;
+			}
+			
+			if(numEnemies == 40){
+				if(i <= 9) enemies[i] = Enemy(4 + spaceBtEnemies*i, enemyYInit, 1, 1, 'X', 10, 0, true, 1);
+				else if(i >= 10 && i <= 19) enemies[i] = Enemy(4 + spaceBtEnemies*(i - 10), enemyYInit + enemyYDifference, 1, 1, 'X', 10, 0, true, 2);
+				else if(i >= 20 && i <= 29) enemies[i] = Enemy(4 + spaceBtEnemies*(i - 20), enemyYInit + 2 * enemyYDifference, 1, 1, 'X', 10, 0, true, 3);
+				else enemies[i] = Enemy(4 + spaceBtEnemies*(i - 30), enemyYInit + 3 * enemyYDifference, 1, 1, 'X', 10, 0, true, 4);
+				i++;
+			}
 			
 			/*
 			enemies1[i] = Enemy(4 + (spaceBtEnemies - 1)*i, enemyYInit, 0, 0, 'X', 10, 0, true);
@@ -66,7 +83,7 @@ void Game::start(){
 	}
 	else{
 		//enemies[i] = Boss(12, 10, 'X', 10, 0, true, 10);
-		enemies[i] = Enemy(25, 7, 15, 3, 'X', 10, 0, true, 4); 
+		enemies[i] = Enemy(25, 7, 15, 3, 'X', 10, 0, true, 5);
 		enemyVelocity = 6;
 	}
 	
@@ -94,7 +111,6 @@ void Game::start(){
 	// desenhar barriers
 	for(int i = 0; i < barriers.size(); i++) barriers[i].drawEntity();
 
-	
 	// preencher shots[]
 	for(int i = 0; i < numTotalShots; i++){
 		shots[i] = Shot(-50, -50, 0, 0, ' ', 0, false, 0);
@@ -104,7 +120,6 @@ void Game::start(){
 	while(!gameOver){
     	
     	if(!gameOver) updatePlayerShots();
-    	if(!gameOver) updateEnemyShots();
     	if(!gameOver) updateShots();
     	if(!gameOver) updateEnemies();
     	if(!gameOver) updatePlayers();
@@ -119,6 +134,7 @@ void Game::start(){
     	
     	//
 		// TESTE
+		/*
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
@@ -138,14 +154,14 @@ void Game::start(){
 		cout << "|| BossHP: " << bossHP << " ";
 		cout << "|| 0 Alive: " << enemies[0].isAlive() << " ";
 		cout << "|| PlayerLost: " << playerLost << " ";
+		*/
 
 		sleep(0.01);
     }
     
     // Quando o jogo acabar:
-    // Se todos os jogadores estão mortos:
     HS scoreManager;
-    if((bossHP > 0 && hasBoss) || !checkPlayersLives() || playerLost){
+    if((bossHP > 0 && hasBoss) || !checkPlayersLives() || playerLost){ // Se perdemos
     	ClearScreen(bgChar);
     	story.story_loss();
 		ClearScreen(bgChar);
@@ -162,7 +178,8 @@ void Game::start(){
     	cout << "Agora vais para o menu.";
     	sleep(2.5);
 	}
-	else{ // Se acabou o jogo, mas há jogadores vivos:
+	
+	else{ // Se ganhamos
 		ClearScreen(bgChar);
 		// Score aumenta com o tempo
 		int scoreBonus = -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do score com o tempo
@@ -245,6 +262,7 @@ void Game::resetMostValues(){
 	resetVelocities();
 	bossHP = initialBossHP;
 	bossBonus = initialBossBonus;
+	spaceBtEnemies = normalSpaceBtEnemies;
 	score = 0;
 }
 
@@ -281,7 +299,8 @@ void Game::checkCols(){
 					// Colisõessssssss
 					if( ( ((enemies[i].getX() + xe) == (shots[s].getX() + shots[s].getSizeX() ))
 					&&  ((enemies[i].getY() + ye) == (shots[s].getY() + shots[s].getSizeY() )) )
-					&& (enemies[i].isAlive() && shots[s].isAlive()) ){
+					&& (enemies[i].isAlive() && shots[s].isAlive()) 
+					&& (shots[s].getType() != -1)){
 						if(!hasBoss || ((numEnemies - numDeadEnemies > 1) && i != 0 && shots[s].getType() != -1 )) enemies[i].setLife(false);	
 						if(!hasBoss || ((numEnemies - numDeadEnemies > 1) && i != 0 && shots[s].getType() != -1 )) enemies[i].clearEntity();
 						if(!hasBoss || ((numEnemies - numDeadEnemies > 1) && i != 0 && shots[s].getType() != -1 )) numDeadEnemies += 1;
@@ -492,10 +511,6 @@ void Game::updateEnemies(){
 		}
 		//
 	}
-}
-
-void Game::updateEnemyShots(){
-	int a = 1;
 }
 
 void Game::updatePlayerShots(){

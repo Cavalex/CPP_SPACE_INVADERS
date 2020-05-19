@@ -2,6 +2,8 @@
 #define CARR_GUAR_H
 #include <iostream>
 #include <string>
+#include <conio.h>
+#include <unistd.h>
 
 #define Ymax 21
 #define Xmax 66
@@ -15,6 +17,9 @@ class Carr_Guar
 		int Menu_Controlo_player();// função de controlo do utilizador
 		void Print_Menu(); // print o Menu.
 		void Guardar_jogo(int, int, string);// função que guarda o nome, e o estado 
+		
+		int Fich_confirm(int);
+		
 		// Gets:
 		int GetFicheiro();
 		int GetMemoria_de_jogo();

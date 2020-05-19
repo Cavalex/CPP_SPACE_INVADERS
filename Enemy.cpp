@@ -51,6 +51,9 @@ void Enemy::drawEntity(){
 				drawOn(xS + x, yS + y, inimigo3[i]);
 			}
 			else if(drawing == 4){
+				drawOn(xS + x, yS + y, inimigo4[i]);
+			}
+			else if(drawing == 5){
 				drawOn(xS + x, yS + y, boss[i]);
 			}
 			i++;
@@ -76,7 +79,7 @@ void Enemy::setLife(bool b){
 }
 
 bool Enemy::collidedWall(){
-	if ((x - sizeX <= 1 && way == -1) || (x + sizeX >= WIDTH - 2 && way == 1)) return true;
+	if (((x - sizeX <= 1 && way == -1) || (x + sizeX >= WIDTH - 2 && way == 1)) && alive == true) return true;
 	else return false;
 }
 

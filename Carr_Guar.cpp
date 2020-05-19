@@ -23,6 +23,60 @@ void gotoxy(int x, int y) //função para mudar a posiçao do cursor que recebe doi
     COORD P={x,y};//criar um ponto com coordenadas
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),P);//mover o cursor para o ponto
 }
+
+//confimação que o ficheiro existe:
+int Carr_Guar::Fich_confirm(int opcao){
+	if(opcao ==1){
+		ifstream s1("guardar jogo 1.txt");
+		ifstream s2("guardar jogo 2.txt");
+		ifstream s3("guardar jogo 3.txt");
+		
+		if (s1 == NULL){
+		
+			system ("cls");
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t    FILE NOT FOUND \n\t\t\t\t      ERROR 404"<< endl;
+			sleep(2);
+			system("cls");
+			s1.close();
+			return 5;
+		}else {
+			s1.close();
+			return opcao;
+		}
+		
+	}	
+		
+	if( opcao == 2){
+		ifstream s2("guardar jogo 2.txt");
+		if (s2 == NULL){
+			system ("cls");
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t    FILE NOT FOUND \n\t\t\t\t      ERROR 404"<< endl;
+			sleep(2);
+			system("cls");
+			s2.close();
+			return 5;
+		}else {
+			s2.close();
+			return opcao;
+		}
+	}
+		
+	if( opcao == 3 ){
+		ifstream s3("guardar jogo 3.txt");
+		if (s3 == NULL){
+			system ("cls");
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t    FILE NOT FOUND \n\t\t\t\t      ERROR 404"<< endl;
+			sleep(2);
+			system("cls");
+			s3.close();
+			return 5;
+		}else {
+			s3.close();
+			return opcao;
+		}
+	}		
+} 
+
 // Gets:
 string Carr_Guar::GetNome_do_jogador(){
 	return nome_do_jogador; 
@@ -327,6 +381,7 @@ int Carr_Guar::Menu_Controlo_player(){
 				break;
 			case ENTER: //ENTER
 					system("cls");// Apaga o ecrã.
+					opcao = Fich_confirm(opcao);
 					return opcao;// retorna a variavel "opcao".
 				break;
 		}

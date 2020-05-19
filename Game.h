@@ -28,7 +28,6 @@ class Game {
 		void updatePlayers();
 		void updateEnemies();
 		void updateShots();
-		void updateEnemyShots();
 		void updatePlayerShots();
 		void updateUI();
 		void start();

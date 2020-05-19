@@ -79,6 +79,10 @@ int main(){
 				fich=b.Menu_Controlo_player();
 				if(fich==4){// volta para o menu principal
 					option =0;
+					break;	
+				}
+				if(fich==5){
+					option =2;
 					break;
 				}
 				b.Carregar_jogo(fich);
@@ -126,14 +130,14 @@ int main(){
 					ClearScreen(bgChar);
 					story.story_lvl2();
 					ClearScreen(bgChar);
-					game = Game(20, 1);
+					game = Game(30, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 3){
 					ClearScreen(bgChar);
 					story.story_lvl3();
 					ClearScreen(bgChar);
-					game = Game(20, 1);
+					game = Game(40, 1);
 					game.start();
 				}
 				else if(b.GetMemoria_de_jogo() == 4){
