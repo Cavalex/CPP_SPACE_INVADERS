@@ -11,7 +11,7 @@
 #include "story.h"
 
 using namespace std;
-//funÃ§ao reticencias
+//funçao reticencias
 void Story::reticencias(){
 	for(int i = 0; i < 3; i++){
 		Sleep(1000);
@@ -59,11 +59,21 @@ void Story::story_intro(){
 	cout << "GO ON COMRADE, SAVE THE WORLD.";
 //	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla
-	getch();
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}
+	
 }
-
+	
 void Story::story_lvl1(){
 	system ("CLS");
 	SetCursorPosition(WIDTH/3 ,HEIGHT/3);
@@ -79,9 +89,18 @@ void Story::story_lvl1(){
 	
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla
-	getch();	
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}
 }
 
 
@@ -94,13 +113,22 @@ void Story::story_lvl2(){
 	cout << "But prepare for your next battle.";
 	SetCursorPosition(WIDTH/3 ,(HEIGHT/3)+2);
 	Sleep(3000);
-	cout << "We've caught sight of more enemies, take care!";
+	cout << "We'vecaught sight of more enemies, take care!";
 
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla	
-	getch();	
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}	
 }
 
 
@@ -120,9 +148,18 @@ void Story::story_lvl3(){
 
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla
-	getch();	
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}	
 }
 
 void Story::story_boss(){
@@ -145,9 +182,18 @@ void Story::story_boss(){
 	
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla
-	getch();
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}
 }
 
 void Story::story_win(){
@@ -167,9 +213,18 @@ void Story::story_win(){
 	
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla
-	getch();
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}
 }
 
 void Story::story_loss(){
@@ -193,8 +248,17 @@ void Story::story_loss(){
 
 	Sleep(100);
 	SetCursorPosition(0 ,HEIGHT-3);
-	cout << " Press any key to continue.";	
+	cout << " Press Enter to continue.";	
 	//esperar para que se prima uma tecla	
-	getch();
+	char botao;
+	while(true){
+    if(kbhit){
+        botao = getch();
+    }else{
+        botao =' ';
+    }
+    if(botao==13)
+        break;
+	}
 }
 
