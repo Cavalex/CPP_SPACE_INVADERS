@@ -56,27 +56,27 @@ int main(){
 				break;
 			case 1:
 				// Criar o jogo
-				b.Menu_Carregar_Guardar_jogo(1);
+				b.Menu_Carregar_Guardar_jogo(1);// Constrói o Menu de New game (1)
 				b.Print_Menu();
-				fich=b.Menu_Controlo_player();
-				if(fich==4){
-					option =0;
+				fich=b.Menu_Controlo_player(1);// funcionalidades do controlo do utilizador com a Variavel de ID op_menu;  
+				if(fich==4){// fich é igual a 4 quando o utilizador clica no "back"
+					option =0;// retorna para o menu principal
 					break;
 				}
 				Nome_player = b.Nome();//Atribuição do nome do jogador
-				playersN[0] = Nome_player;
-				b.Guardar_jogo(fich, 1, Nome_player);
-				b.SetNome_do_jogador(Nome_player);
-				b.SetFicheiro(fich);
-				b.SetMemoria_de_jogo(1);
-				story.story_intro();
-				option =6;
+				playersN[0] = b.Nome();
+				b.Guardar_jogo(fich, 1, Nome_player);// guarda p jogo ( id ficheiro , nivel 1 , Nome criado )
+				b.SetNome_do_jogador(Nome_player);// set nome do jogador
+				b.SetFicheiro(fich);  // set id ficheiro
+				b.SetMemoria_de_jogo(1); // set o estado de jogo.
+				story.story_intro(); // introdução da história.
+				option =6;// entra na opção dos niveis.
 				break;
 			case 2:
 				// load game:
-				b.Menu_Carregar_Guardar_jogo(2);
+				b.Menu_Carregar_Guardar_jogo(2);// Constrói o Menu de Load a Game (2)
 				b.Print_Menu();
-				fich=b.Menu_Controlo_player();
+				fich=b.Menu_Controlo_player(2);// funcionalidades do controlo do utilizador com a Variavel de ID op_menu; 
 				if(fich==4){// volta para o menu principal
 					option =0;
 					break;	
@@ -92,8 +92,7 @@ int main(){
 			case 3:
 				// Não é presiso transportar nenhuma variavel para iniciar a função, pois ela não vai depender nem do nome 
 				//do jogador, nem de qualquer score , nem do nivel... Ela inicia-se sozinha pelo código em baixo.
-				// Mas ela retorna a "opção_menu" "0" (que não tem de ser obrigatóriamente "0") para que o utilizador retorne ao 
-				//menu principal. 
+				// Mas ela retorna a "opção_menu" "0"  para que o utilizador retorne ao menu principal. 
 				
 				nivel_op=1;// nivel permanente 
 				sco.Build_Menu_HS_constante();// constroí o Menu High Score
@@ -119,28 +118,28 @@ int main(){
 				break;
 				
 			case 6:
-				if(b.GetMemoria_de_jogo() == 1){
+				if(b.GetMemoria_de_jogo() == 1){// nivel 1
 					ClearScreen(bgChar);
 					story.story_lvl1();
 					ClearScreen(bgChar);
 					game = Game(20, 1);
 					game.start();
 				}
-				else if(b.GetMemoria_de_jogo() == 2){
+				else if(b.GetMemoria_de_jogo() == 2){ //nivel 2
 					ClearScreen(bgChar);
 					story.story_lvl2();
 					ClearScreen(bgChar);
 					game = Game(30, 1);
 					game.start();
 				}
-				else if(b.GetMemoria_de_jogo() == 3){
+				else if(b.GetMemoria_de_jogo() == 3){ // nivel 3
 					ClearScreen(bgChar);
 					story.story_lvl3();
 					ClearScreen(bgChar);
 					game = Game(40, 1);
 					game.start();
 				}
-				else if(b.GetMemoria_de_jogo() == 4){
+				else if(b.GetMemoria_de_jogo() == 4){ // nivel boss
 					ClearScreen(bgChar);
 					story.story_boss();
 					ClearScreen(bgChar);
@@ -148,7 +147,7 @@ int main(){
 					game.start();
 				}
 				else{
-					cout << "\nErro!!!! A memória de jogo é: " << b.GetMemoria_de_jogo();
+					cout << "\nErro!!!! A memória de jogo é: " << b.GetMemoria_de_jogo(); // erro de leitura da memoria de jogo
 					sleep(1000);
 				}
 				break;

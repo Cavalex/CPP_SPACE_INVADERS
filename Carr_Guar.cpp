@@ -315,7 +315,7 @@ void Carr_Guar::Carregar_jogo(int opcao){
 }
 
 // CONTROLO DO PLAYER E DESENHOS VARIAVEIS:
-int Carr_Guar::Menu_Controlo_player(){
+int Carr_Guar::Menu_Controlo_player( int op_menu){
 	char botao;
 	int opcao=1;// Variavel retornada pelo "ENTER".
 	char ponteiro = 254;// Representação do indicador da opção.
@@ -380,8 +380,11 @@ int Carr_Guar::Menu_Controlo_player(){
 				}
 				break;
 			case ENTER: //ENTER
+					if(op_menu==2){
+						opcao = Fich_confirm(opcao);	
+					}
 					system("cls");// Apaga o ecrã.
-					opcao = Fich_confirm(opcao);
+					
 					return opcao;// retorna a variavel "opcao".
 				break;
 		}

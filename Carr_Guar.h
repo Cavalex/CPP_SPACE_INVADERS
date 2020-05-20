@@ -14,7 +14,7 @@ class Carr_Guar
 	
 	public:
 		Menu_Carregar_Guardar_jogo(int);// constrói o Menu do Carregar ou New game
-		int Menu_Controlo_player();// função de controlo do utilizador
+		int Menu_Controlo_player(int);// função de controlo do utilizador
 		void Print_Menu(); // print o Menu.
 		void Guardar_jogo(int, int, string);// função que guarda o nome, e o estado 
 		
