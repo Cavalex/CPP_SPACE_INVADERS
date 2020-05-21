@@ -134,7 +134,6 @@ void Game::start(){
     	
     	//
 		// TESTE
-		/*
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
@@ -152,9 +151,8 @@ void Game::start(){
 		cout << "|| Lives: " << players[0].getLives() << " ";
 		cout << "|| Enemies: " << b << " ";
 		cout << "|| BossHP: " << bossHP << " ";
-		cout << "|| 0 Alive: " << enemies[0].isAlive() << " ";
+		cout << "|| Boss Alive: " << enemies[0].isAlive() << " ";
 		cout << "|| PlayerLost: " << playerLost << " ";
-		*/
 
 		sleep(0.01);
     }
@@ -162,6 +160,22 @@ void Game::start(){
     // Quando o jogo acabar:
     HS scoreManager;
     if((bossHP > 0 && hasBoss) || !checkPlayersLives() || playerLost){ // Se perdemos
+    	//TESTE
+    	/*
+    	SetCursorPosition(10, 10);
+    	cout << "PERDESTE";
+		char botao;
+		while(true){
+	    if(kbhit){
+	        botao = getch();
+	    }else{
+	        botao =' ';
+	    }
+	    if(botao==13)
+	        break;
+		}
+		*/
+		
     	ClearScreen(bgChar);
     	story.story_loss();
 		ClearScreen(bgChar);
@@ -175,20 +189,38 @@ void Game::start(){
 		scoreT.restart();
 		resetMostValues();
 		SetCursorPosition(WIDTH/2 - 15, HEIGHT/2 - 2);
-    	cout << "Agora vais para o menu.";
+    	cout << "Now you're going to the menu";
     	sleep(2.5);
 	}
 	
 	else{ // Se ganhamos
+	    //TESTE
+	    /*
+    	SetCursorPosition(10, 10);
+    	cout << "GANHASTE";
+		char botao;
+		while(true){
+	    if(kbhit){
+	        botao = getch();
+	    }else{
+	        botao =' ';
+	    }
+	    if(botao==13)
+	        break;
+		}
+		*/
+		
+		
 		ClearScreen(bgChar);
 		// Score aumenta com o tempo
 		int scoreBonus = -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do score com o tempo
 		if(scoreBonus >= 0){
 			score += scoreBonus; // função de aumento do tempo	
 		}
+		for(int i = 0; i < playerLives; i++) score += 200; // aumentar score com o numero de vidas
 		
 		// Tabela de score
-		SetCursorPosition(WIDTH/2 - 8, HEIGHT/2);
+		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2);
 		cout << "SCORE: " << score;
 		sleep(3.5);
 		
@@ -251,11 +283,13 @@ void Game::updateUI(){
 	cout << "   ";
 }
 
+// Meter as velocidades nos valores normais
 void Game::resetVelocities(){
 	enemyVelocity = initialEnemyVelocity;
 	shotVelocity = initialShotVelocity;
 }
 
+// Resetar os valores iniciais de cada nível
 void Game::resetMostValues(){
 	velBonus = initialBonus;
 	shotChance = initialShotChance;
@@ -266,11 +300,13 @@ void Game::resetMostValues(){
 	score = 0;
 }
 
+// Uma pequena função para ver se o jogo acabou
 void Game::checkGameOver(){
 	if(numDeadEnemies >= numEnemies) gameOver = true;
 	checkPlayersLives();
 }
 
+// Ver se o jogador morreu
 bool Game::checkPlayersLives(){
 	bool allDead = true;
 	for(int i = 0; i < numPlayers; i++){
@@ -288,6 +324,7 @@ bool Game::checkPlayersLives(){
 	return true;
 }
 
+// Colisões
 void Game::checkCols(){
 	
 	// Colisões Inimigos-Balas
@@ -396,6 +433,7 @@ void Game::checkCols(){
 					&& (enemies[i].isAlive() && barriers[s].isAlive()) ){
 						// Se colidirem o jogo acaba:
 						gameOver = true;
+						playerLost = true;
 						barriers[s].setLife(false);
 						enemies[i].setLife(false);
 						barriers[s].clearEntity();
@@ -407,12 +445,14 @@ void Game::checkCols(){
 	}
 }
 
+// Movimento dos jogadores
 void Game::updatePlayers(){
 	for(int i = 0; i < numPlayers; i++){
 		if (players[i].isAlive() == true) players[i].action();
 	}
 }
 
+// Movimento dos inimigos/boss
 void Game::updateEnemies(){
 	
 	int checkedCol = false;
@@ -465,10 +505,12 @@ void Game::updateEnemies(){
 				if (i == numEnemies) break;
 			}
 		}
+		
 		// Resetar o wasAllDrop
 		if(wasAllDrop >= 0 && wasAllDrop <= preventValue){
 			wasAllDrop -= 1;
 		}
+		
 		// Se algum deles colidir com a barreira então descem todos ao mesmo tempo
 		if (allDrop && wasAllDrop <= 0){
 			way = -way;
@@ -513,6 +555,7 @@ void Game::updateEnemies(){
 	}
 }
 
+// Os tiros do jogador
 void Game::updatePlayerShots(){
 	
 	// Se alguém disparar, criar o tiro no array
@@ -531,6 +574,7 @@ void Game::updatePlayerShots(){
 	}
 }
 
+// O movimento dos tiros e os tiros dos inimigos
 void Game::updateShots(){
 	
 	// Temos que atualizar aqui os tiros, se o fizermos na classe Shot arriscamo-nos

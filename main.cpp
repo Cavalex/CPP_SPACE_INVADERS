@@ -64,7 +64,7 @@ int main(){
 					break;
 				}
 				Nome_player = b.Nome();//Atribuição do nome do jogador
-				playersN[0] = b.Nome();
+				playersN[0] = Nome_player;
 				b.Guardar_jogo(fich, 1, Nome_player);// guarda p jogo ( id ficheiro , nivel 1 , Nome criado )
 				b.SetNome_do_jogador(Nome_player);// set nome do jogador
 				b.SetFicheiro(fich);  // set id ficheiro
@@ -79,7 +79,7 @@ int main(){
 				fich=b.Menu_Controlo_player(2);// funcionalidades do controlo do utilizador com a Variavel de ID op_menu; 
 				if(fich==4){// volta para o menu principal
 					option =0;
-					break;	
+					break;
 				}
 				if(fich==5){
 					option =2;

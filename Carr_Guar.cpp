@@ -410,7 +410,7 @@ string Carr_Guar::Nome(){
 	int len ;
 	do{
 		char botao;
-		cout<< "\n\n\n\n\t\tENTER YOUR NAME:_ _ _ _ (MAX 4 LETTERS, please or numbers!)\n\t\t:"	;
+		cout<< "\n\n\n\n\t\tENTER YOUR NAME:_ _ _ _ (MAX 4 CHARACTERS!)\n\t\t:"	;
 		cin >> nome;// nome criado pelo utilizador.
 		len=nome.length();// atribui o tamanho da string
 		if(len>4){// easter egg : Dumb.
