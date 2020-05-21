@@ -20,7 +20,6 @@ class Enemy : public Entity {
 		void moveHorizontally();
 		void moveVertically();
 		bool collidedWall();
-		double getVelocity();
 		void setLife(bool);
 		bool isAlive();
 		void drawEntity();

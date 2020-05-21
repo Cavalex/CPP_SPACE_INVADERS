@@ -134,6 +134,7 @@ void Game::start(){
     	
     	//
 		// TESTE
+		/*
     	int a = 0;
     	for(int i = 0; i < numTotalShots; i++){
 			if(shots[i].isAlive()){
@@ -153,7 +154,8 @@ void Game::start(){
 		cout << "|| BossHP: " << bossHP << " ";
 		cout << "|| Boss Alive: " << enemies[0].isAlive() << " ";
 		cout << "|| PlayerLost: " << playerLost << " ";
-
+		*/
+		
 		sleep(0.01);
     }
     
@@ -297,6 +299,7 @@ void Game::resetMostValues(){
 	bossHP = initialBossHP;
 	bossBonus = initialBossBonus;
 	spaceBtEnemies = normalSpaceBtEnemies;
+	numDeadEnemies = 0;
 	score = 0;
 }
 

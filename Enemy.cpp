@@ -83,7 +83,5 @@ bool Enemy::collidedWall(){
 	else return false;
 }
 
-double Enemy::getVelocity(){ return velocity; }
-
 bool Enemy::isAlive(){ return alive; }
 
