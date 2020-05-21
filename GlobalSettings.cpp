@@ -28,6 +28,8 @@
 #define bgChar ' '
 #define barrierChar 'H'
 
+#include "Timer.cpp"
+
 using namespace std;
 
 // vamos ignorar esta primeira variável pq acrescentamos um cooldown nos tiros,
@@ -55,8 +57,12 @@ char playerControls2[4][3] = {{VK_UP, VK_LEFT, VK_RIGHT},
 
 int option; // O valor que foi selecionado no menu
 Carr_Guar b; // O objeto que vai ser usado para controlar o estado do jogo.
-int score = 0;
+Timer scoreT; // O timer do score
+double tempoPassado = 0;
+int score = 0; // O score...
 int fich; // O ficheiro onde o jogo está a ser "corrido" (salvar/guardar)
+bool leftGame = false; // Para saber se o jogador saiu do jogo a meio
+bool returned = false;
 
 //TESTE
 int j = 0;

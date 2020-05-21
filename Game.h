@@ -51,7 +51,7 @@ class Game {
 		Enemy enemies[50];
 		Player players[4];
 		//Shot shots[numShotsPP * numPlayers];
-		Shot shots[400];
+		Shot shots[200];
 		vector<Barrier> barriers;
 		
 	// não funcionam com protected, públicas it is

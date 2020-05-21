@@ -22,7 +22,6 @@ Story story;
 // Os timers para os movimentos dos inimigos e dos jogadores
 Timer t;
 Timer t2;
-Timer scoreT;
 
 Game::Game(int n, int p, bool b = false){
 	this->numEnemies = n;
@@ -118,11 +117,13 @@ void Game::start(){
 	
 	// game loop
 	while(!gameOver){
-    	
+		
     	if(!gameOver) updatePlayerShots();
     	if(!gameOver) updateShots();
     	if(!gameOver) updateEnemies();
     	if(!gameOver) updatePlayers();
+    	if(returned){ for(int i = 0; i < numBarriers * barrierAverageSize; i++) if(barriers[i].isAlive()) barriers[i].drawEntity(); returned = false; players[0].drawEntity(); } // Se continuar o jogo desenhar as barreiras
+    	if(leftGame){ resetMostValues(); scoreT.restart(); break; } // Se o jogador sair do jogo
     	if(!gameOver) checkCols();
     	if(!gameOver) checkGameOver();
     	updateUI();
@@ -161,91 +162,95 @@ void Game::start(){
     
     // Quando o jogo acabar:
     HS scoreManager;
-    if((bossHP > 0 && hasBoss) || !checkPlayersLives() || playerLost){ // Se perdemos
-    	//TESTE
-    	/*
-    	SetCursorPosition(10, 10);
-    	cout << "PERDESTE";
-		char botao;
-		while(true){
-	    if(kbhit){
-	        botao = getch();
-	    }else{
-	        botao =' ';
-	    }
-	    if(botao==13)
-	        break;
+	if(!leftGame){
+	    if((bossHP > 0 && hasBoss) || !checkPlayersLives() || playerLost){ // Se perdemos
+	    	//TESTE
+	    	/*
+	    	SetCursorPosition(10, 10);
+	    	cout << "PERDESTE";
+			char botao;
+			while(true){
+		    if(kbhit){
+		        botao = getch();
+		    }else{
+		        botao =' ';
+		    }
+		    if(botao==13)
+		        break;
+			}
+			*/
+			
+	    	ClearScreen(bgChar);
+	    	story.story_loss();
+			ClearScreen(bgChar);
+	    	
+	    	// Se perder, recomeçar o jogo
+	    	b.SetMemoria_de_jogo(0);
+	    	if(b.GetMemoria_de_jogo() == 0){
+	    		option = 0;
+			}
+			// Reiniciar Score
+			scoreT.restart();
+			resetMostValues();
+			SetCursorPosition(WIDTH/2 - 15, HEIGHT/2 - 2);
+	    	cout << "Now you're going to the menu";
+	    	sleep(2.5);
 		}
-		*/
-		
-    	ClearScreen(bgChar);
-    	story.story_loss();
-		ClearScreen(bgChar);
-    	
-    	// Se perder, recomeçar o jogo
-    	b.SetMemoria_de_jogo(0);
-    	if(b.GetMemoria_de_jogo() == 0){
-    		option = 0;
-		}
-		// Reiniciar Score
-		scoreT.restart();
-		resetMostValues();
-		SetCursorPosition(WIDTH/2 - 15, HEIGHT/2 - 2);
-    	cout << "Now you're going to the menu";
-    	sleep(2.5);
+		else{ // Se ganhamos
+		    //TESTE
+		    /*
+	    	SetCursorPosition(10, 10);
+	    	cout << "GANHASTE";
+			char botao;
+			while(true){
+		    if(kbhit){
+		        botao = getch();
+		    }else{
+		        botao =' ';
+		    }
+		    if(botao==13)
+		        break;
+			}
+			*/
+			
+			
+			ClearScreen(bgChar);
+			// Score aumenta com o tempo
+			int scoreBonus = -0.035 * (int)(scoreT.getTimePassed() + tempoPassado) * (int)(scoreT.getTimePassed() + tempoPassado) + 500; // função de aumento do score com o tempo
+			if(scoreBonus >= 0){
+				score += scoreBonus; // função de aumento do tempo	
+			}
+			for(int i = 0; i < playerLives; i++) score += 200; // aumentar score com o numero de vidas
+			
+			// Tabela de score
+			SetCursorPosition(WIDTH/2 - 7, HEIGHT/2);
+			cout << "SCORE: " << score;
+			sleep(3.5);
+			
+			// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
+			scoreManager.SetScore(b.GetMemoria_de_jogo());
+			scoreManager.Bubble_Sort_score(score, playersN[0], b.GetMemoria_de_jogo());
+			
+			scoreT.restart();
+			resetMostValues();
+			
+			// Aumentar o nível
+			if(b.GetMemoria_de_jogo() != 4){
+				b.SetMemoria_de_jogo(b.GetMemoria_de_jogo() + 1);
+				b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);	
+			}
+			else {
+				ClearScreen(bgChar);
+				story.story_win();
+				ClearScreen(bgChar);
+				// CRÉDITOS
+				ClearScreen(bgChar);
+				option = 4;
+			}
+		}	
 	}
-	
-	else{ // Se ganhamos
-	    //TESTE
-	    /*
-    	SetCursorPosition(10, 10);
-    	cout << "GANHASTE";
-		char botao;
-		while(true){
-	    if(kbhit){
-	        botao = getch();
-	    }else{
-	        botao =' ';
-	    }
-	    if(botao==13)
-	        break;
-		}
-		*/
-		
-		
-		ClearScreen(bgChar);
-		// Score aumenta com o tempo
-		int scoreBonus = -0.035 * (int)scoreT.getTimePassed() * (int)scoreT.getTimePassed() + 500; // função de aumento do score com o tempo
-		if(scoreBonus >= 0){
-			score += scoreBonus; // função de aumento do tempo	
-		}
-		for(int i = 0; i < playerLives; i++) score += 200; // aumentar score com o numero de vidas
-		
-		// Tabela de score
-		SetCursorPosition(WIDTH/2 - 7, HEIGHT/2);
-		cout << "SCORE: " << score;
-		sleep(3.5);
-		
-		// Guardar o score, o nome e o estado (HS e comparaçoes dentro da funçao do Marco)
-		scoreManager.SetScore(b.GetMemoria_de_jogo());
-		scoreManager.Bubble_Sort_score(score, playersN[0], b.GetMemoria_de_jogo());
-		
-		scoreT.restart();
-		resetMostValues();
-		
-		// Aumentar o nível
-		if(b.GetMemoria_de_jogo() != 4){
-			b.SetMemoria_de_jogo(b.GetMemoria_de_jogo() + 1);
-			b.Guardar_jogo(fich, b.GetMemoria_de_jogo(), playersN[0]);	
-		}
-		else {
-			ClearScreen(bgChar);
-			story.story_win();
-			ClearScreen(bgChar);
-			// CRÉDITOS
-			ClearScreen(bgChar);
-			option = 4;
-		}
+	else{
+		leftGame = false;
 	}
 }
 
@@ -270,7 +275,7 @@ void Game::updateUI(){
 	
 	// TEMPO
 	SetCursorPosition(WIDTH - 16, 1);
-	cout << "Time: " << scoreT.getTimePassed() << " ";
+	cout << "Time: " << scoreT.getTimePassed() + tempoPassado << " ";
 	
 	// SCORE
 	SetCursorPosition(5, HEIGHT - 2);
@@ -300,6 +305,7 @@ void Game::resetMostValues(){
 	bossBonus = initialBossBonus;
 	spaceBtEnemies = normalSpaceBtEnemies;
 	numDeadEnemies = 0;
+	tempoPassado = 0;
 	score = 0;
 }
 

@@ -8,6 +8,7 @@
 #include "GlobalSettings.cpp"
 #include "Player.h"
 #include "Shot.cpp"
+#include "Timer.cpp"
 
 using namespace std;
 
@@ -78,7 +79,36 @@ void Player::action(){
 			// movimento para a direita
 	        if(value == playerControls[num-1][2])
 	            moveTo(x + 1, y);
-	        
+	        // PAUSA DO JOGO
+	        if(value == 27){
+		    	while(true){
+		    		tempoPassado += scoreT.getTimePassed();
+		        	ClearScreen(bgChar);
+		        	SetCursorPosition(WIDTH/2 - 3, HEIGHT/2);
+		        	cout << "PAUSED";
+		        	SetCursorPosition(WIDTH/2 - 12, HEIGHT/2 + 1);
+		        	cout << "PRESS ESC TO GO TO THE MENU";
+		        	SetCursorPosition(WIDTH/2 - 12, HEIGHT/2 + 2);
+		        	cout << "PRESS ENTER TO CONTINUE";
+		        	if(kbhit){
+				        value = getch();
+				        if(value == 13){
+				        	ClearScreen(bgChar);
+							returned = true;
+							tempoPassado -= scoreT.getTimePassed();
+							break;
+						}
+						else if(value == 27){
+							ClearScreen(bgChar);
+							leftGame = true;
+							option = 0;
+							break;
+						}
+				    }
+					sleep(0.05);
+				}
+				value = 0;
+			}
 			//if(GetKeyState(playerControls2[num-1][0]) & 0x8000 /*Check if high-order bit is set (1 << 15)*/)
 			//{
 			//    shoot();
