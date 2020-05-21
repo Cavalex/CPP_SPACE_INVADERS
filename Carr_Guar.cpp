@@ -1,5 +1,5 @@
-#include "Carr_Guar.h"// inclusão da class Carr_Guar
-#include <Windows.h>// função gotoxy( x , y )
+#include "Carr_Guar.h"// inclusÃ£o da class Carr_Guar
+#include <Windows.h>// funÃ§Ã£o gotoxy( x , y )
 #include <iostream>
 #include <string> // biblioteca de strings
 #include <fstream> // streams de ficheiros
@@ -18,13 +18,13 @@
 
 using namespace std;
 
-void gotoxy(int x, int y) //função para mudar a posiçao do cursor que recebe dois valores que vão servir de coordenadas
+void gotoxy(int x, int y) //funÃ§Ã£o para mudar a posiÃ§ao do cursor que recebe dois valores que vÃ£o servir de coordenadas
 {
     COORD P={x,y};//criar um ponto com coordenadas
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),P);//mover o cursor para o ponto
 }
 
-//confimação que o ficheiro existe:
+//confimaÃ§Ã£o que o ficheiro existe:
 int Carr_Guar::Fich_confirm(int opcao){
 	if(opcao ==1){
 		ifstream s1("guardar jogo 1.txt");
@@ -101,8 +101,8 @@ void Carr_Guar::SetFicheiro(int fich){
 	this->Ficheiro = fich;
 }
 
- Carr_Guar::Menu_Carregar_Guardar_jogo(int op){//construção dos desenhos permanentes 
-	int v=0;//inteiro para indicar as possições das strings abaixo:
+ Carr_Guar::Menu_Carregar_Guardar_jogo(int op){//construÃ§Ã£o dos desenhos permanentes 
+	int v=0;//inteiro para indicar as possiÃ§Ãµes das strings abaixo:
 	int MAX;
 	if(op==1){
 		 MAX=8;
@@ -138,7 +138,7 @@ void Carr_Guar::SetFicheiro(int fich){
 	string level ="LEVEL:";
 	
 	int lenn1, lenn2, lenn3, lene1, lene2, lene3;
-	//REPRESENTAÇÃO DOS LIMITES, LINHAS, ESPAÇOS VAZIOS E PREENCHIDOS:
+	//REPRESENTAÃ‡ÃƒO DOS LIMITES, LINHAS, ESPAÃ‡OS VAZIOS E PREENCHIDOS:
 	for(int i=0;i<Ymax;i++){// "0" a "21" linhas.
 		for(int j=0;j<Xmax;j++){// "0" a "66" colunas.
 			if(i<3 && ((j>=0 && j<=22 )|| (j>=44 && j<66))){
@@ -153,9 +153,9 @@ void Carr_Guar::SetFicheiro(int fich){
 			}
 		}
 	}
-	// REPRESENTAÇÃO DOS NOMES E MEMORIA DE JOGO GUARDADOS NOS FICHEIROS:
+	// REPRESENTAÃ‡ÃƒO DOS NOMES E MEMORIA DE JOGO GUARDADOS NOS FICHEIROS:
 	ifstream guardar1 ("guardar jogo 1.txt");// ficheiro 1
-	if(guardar1== NULL){// Caso o ficheiro 1 não exista, fazer:
+	if(guardar1== NULL){// Caso o ficheiro 1 nÃ£o exista, fazer:
 		nome1= "ERROR";
 		estado1 = "404";
 	}else{
@@ -167,7 +167,7 @@ void Carr_Guar::SetFicheiro(int fich){
 	}
 	
 	ifstream guardar2 ("guardar jogo 2.txt");	
-	if(guardar2== NULL){// Caso o ficheiro 2 não exista, fazer:
+	if(guardar2== NULL){// Caso o ficheiro 2 nÃ£o exista, fazer:
 		nome2= "ERROR";
 		estado2 ="404";
 	}else{
@@ -179,7 +179,7 @@ void Carr_Guar::SetFicheiro(int fich){
 	}
 	
 	ifstream guardar3 ("guardar jogo 3.txt");
-	if(guardar3== NULL){// Caso o ficheiro 3 não exista, fazer:
+	if(guardar3== NULL){// Caso o ficheiro 3 nÃ£o exista, fazer:
 		nome3= "ERROR";
 		estado3 = "404";
 	}else{
@@ -189,7 +189,7 @@ void Carr_Guar::SetFicheiro(int fich){
 			estado3="BOSS";// sbstitui o "level: 3" por "level: BOSS 1"
 		}
 	}
-	//atribuição dos tamanhos das strings:
+	//atribuiÃ§Ã£o dos tamanhos das strings:
 	lenn1=nome1.length();
 	lene1=estado1.length();
 	lenn2=nome2.length();
@@ -197,8 +197,8 @@ void Carr_Guar::SetFicheiro(int fich){
 	lenn3=nome3.length();
 	lene3=estado3.length();
 	
-	// REPRESENTAÇÃO DAS STRINGS NA MATRIZ:
-	for(int j=0;j<MAX;j++){// máx de posições com carateres = 11, a contar com o "0" ( "0 a 10 posições" ).
+	// REPRESENTAÃ‡ÃƒO DAS STRINGS NA MATRIZ:
+	for(int j=0;j<MAX;j++){// mÃ¡x de posiÃ§Ãµes com carateres = 11, a contar com o "0" ( "0 a 10 posiÃ§Ãµes" ).
 		if(MAX==8){
 			Menu [1][28 + j]=New_game[j];
 		}	
@@ -222,7 +222,7 @@ void Carr_Guar::SetFicheiro(int fich){
 			Menu [15][26 + j]=level[j];
 			Menu [15][48 + j]=level[j];
 		}
-		// representação dos nomes e dos niveis guardados em todos od ficheiros (ficheiro NULL tem o nome "ERROR" e nivel "404".
+		// representaÃ§Ã£o dos nomes e dos niveis guardados em todos od ficheiros (ficheiro NULL tem o nome "ERROR" e nivel "404".
 		if(j<lenn1){//nome de ficheiro 1
 			Menu [14][11 + j]=nome1[j];
 		}
@@ -243,7 +243,7 @@ void Carr_Guar::SetFicheiro(int fich){
 		}
 	}
 	
-	//REPRESENTAÇÃO DOS DESENHOS DOS NUMEROS "1", "2", "3":
+	//REPRESENTAÃ‡ÃƒO DOS DESENHOS DOS NUMEROS "1", "2", "3":
 	for(int i=0;i<5;i++){// 5 linhas.
 		for(int j=0;j<6;j++){// 6 colunas.
 			Menu[7+i][8+j]=UM[v];// "1".
@@ -280,9 +280,9 @@ void Carr_Guar::Guardar_jogo(int opcao, int estado, string nome){
 void Carr_Guar::Carregar_jogo(int opcao){
 		string nome; 
 		int estado;
-		if(opcao==1){// caso a Opção do player seja o ficheiro 1, fazer:
+		if(opcao==1){// caso a OpÃ§Ã£o do player seja o ficheiro 1, fazer:
 		ifstream guardar1 ("guardar jogo 1.txt");
-		if(guardar1== NULL){// caso não abra:
+		if(guardar1== NULL){// caso nÃ£o abra:
 			this-> memoria_de_jogo=404;
 		}else{
 			guardar1 >> nome >> estado; 	
@@ -290,9 +290,9 @@ void Carr_Guar::Carregar_jogo(int opcao){
 		guardar1.close();//fecha ficheiro.
 	}
 		
-	else if(opcao==2){// caso a Opção do player seja o ficheiro 2, fazer:
+	else if(opcao==2){// caso a OpÃ§Ã£o do player seja o ficheiro 2, fazer:
 		ifstream guardar2 ("guardar jogo 2.txt");
-		if(guardar2== NULL){// caso não abra:
+		if(guardar2== NULL){// caso nÃ£o abra:
 			this-> memoria_de_jogo=404;
 		}else{
 			guardar2 >> nome >>estado; 	
@@ -300,9 +300,9 @@ void Carr_Guar::Carregar_jogo(int opcao){
 		guardar2.close();//fecha ficheiro.
 	}
 		
-	else if(opcao==3){// caso a Opção do player seja o ficheiro 3, fazer:
+	else if(opcao==3){// caso a OpÃ§Ã£o do player seja o ficheiro 3, fazer:
 		ifstream guardar3 ("guardar jogo 3.txt");
-		if(guardar3== NULL){// caso não abra:
+		if(guardar3== NULL){// caso nÃ£o abra:
 			this-> memoria_de_jogo=404;
 		}else{
 			guardar3 >> nome >> estado; 	
@@ -318,16 +318,16 @@ void Carr_Guar::Carregar_jogo(int opcao){
 int Carr_Guar::Menu_Controlo_player( int op_menu){
 	char botao;
 	int opcao=1;// Variavel retornada pelo "ENTER".
-	char ponteiro = 254;// Representação do indicador da opção.
+	char ponteiro = 254;// RepresentaÃ§Ã£o do indicador da opÃ§Ã£o.
 	int j=13;// j= x + 43.
 	int i=4;// i= y + 10.
-	// Posição inicial do ponteiro.
+	// PosiÃ§Ã£o inicial do ponteiro.
 	gotoxy( 12+j,6 + i);// 
 	cout << ponteiro;
-	// Ciclo infiníto:
+	// Ciclo infinÃ­to:
 	for(;;){
-		if(kbhit()){ //lê se algum botão foi premido.
-				botao=getch();	// dá valor ao botão.	
+		if(kbhit()){ //lÃª se algum botÃ£o foi premido.
+				botao=getch();	// dÃ¡ valor ao botÃ£o.	
 		}else {
 			botao=' ';
 		}
@@ -338,8 +338,8 @@ int Carr_Guar::Menu_Controlo_player( int op_menu){
 					cout<<" ";// Apaga
 					j+=22;// soma +22 ao "j".
 					gotoxy( 12+j,6 + i);
-					cout << ponteiro;// Imprime a nova posição do "ponteiro".
-					opcao++;// soma +1 à "opcao".
+					cout << ponteiro;// Imprime a nova posiÃ§Ã£o do "ponteiro".
+					opcao++;// soma +1 Ã  "opcao".
 				}
 				break;
 				
@@ -349,33 +349,33 @@ int Carr_Guar::Menu_Controlo_player( int op_menu){
 					cout<<" ";// Apaga
 					j-=22;// Decrementa -22 ao "j".
 					gotoxy( 12+j,6 + i);
-					cout << ponteiro;// Imprime a nova posição do "ponteiro".
-					opcao--;// Decrementa -1 à "opcao".
+					cout << ponteiro;// Imprime a nova posiÃ§Ã£o do "ponteiro".
+					opcao--;// Decrementa -1 Ã  "opcao".
 				}
 				break;
 				
 			case 80: //baixo
-				if(opcao<=3){// Condição do funcionamento
+				if(opcao<=3){// CondiÃ§Ã£o do funcionamento
 					gotoxy( 12+j,6 + i);
 					cout<<" ";// Apaga
 					this-> memoria[0] = opcao ;// guarda a "opcao", para mais tarde ser recuperada.
 					this-> memoria[1] = j;// guarda o "j", para mais tarde ser recuperado.
 					i=18;// linha do "BACK".
-					j=35;// coluna Mais á direita do "BACK".
+					j=35;// coluna Mais Ã¡ direita do "BACK".
 					gotoxy( 12+j,6 + i);
-					cout << ponteiro;// Imprime a nova posição do "ponteiro".
+					cout << ponteiro;// Imprime a nova posiÃ§Ã£o do "ponteiro".
 					opcao = 4;	
 				}
 				break;
 			
 			case KEY_UP: //cima
-				if(opcao==4){// condição do funcionamento
+				if(opcao==4){// condiÃ§Ã£o do funcionamento
 					gotoxy( 12+j,6 + i);
 					cout<<" ";// Apaga
 					j= memoria[1];// Recupera o "j".
 					i=4;// linha dos slots
 					gotoxy( 12+j,6 + i);
-					cout << ponteiro; // Imprime a nova posição do "ponteiro".
+					cout << ponteiro; // Imprime a nova posiÃ§Ã£o do "ponteiro".
 					opcao= memoria[0];// Recupera a "opcao".			
 				}
 				break;
@@ -383,7 +383,7 @@ int Carr_Guar::Menu_Controlo_player( int op_menu){
 					if(op_menu==2){
 						opcao = Fich_confirm(opcao);	
 					}
-					system("cls");// Apaga o ecrã.
+					system("cls");// Apaga o ecrÃ£.
 					
 					return opcao;// retorna a variavel "opcao".
 				break;
@@ -402,7 +402,7 @@ void Carr_Guar::Print_Menu(){
 	}
 }
 
-//função de Novo Jogo:
+//funÃ§Ã£o de Novo Jogo:
 string Carr_Guar::Nome(){
 	string nome;
 	int easter_Egg = 0;
@@ -421,7 +421,7 @@ string Carr_Guar::Nome(){
 				easter_Egg++;
 				system("cls");	
 			}else if(easter_Egg==1){
-				cout << "\n\n\n\n\t\tITS JUST 4 LETTERS!!! COME ON IS NOT THAT HARD..";
+				cout << "\n\n\n\n\t\tITS JUST 4 LETTERS!!! COME ON IT'S NOT THAT HARD..";
 				sleep(4);
 				easter_Egg++;
 				system("cls");
